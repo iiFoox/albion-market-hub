@@ -1,0 +1,20 @@
+# Vercel Ignore
+# Prevent framework-specific and non-production files from being uploaded to Vercel build environment
+
+.agents/
+agents/
+*.md
+.antigravity/
+.gemini/
+scripts/
+tests/
+benchmarks/
+docs/
+kernel/
+memory/
+profiles/
+protocols/
+reports/
+telemetry/
+tools/
+workflows/
