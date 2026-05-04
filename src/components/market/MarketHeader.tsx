@@ -36,17 +36,9 @@ export function MarketHeader({
   const showDropdown = search.trim().length >= 1;
 
   return (
-    <header className="app-header" style={{ 
-      padding: '24px 32px', 
-      background: 'var(--bg-card)', 
-      backdropFilter: 'blur(20px)',
-      borderBottom: '1px solid var(--border)',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '32px'
-    }}>
+    <header className="app-header">
       {/* Mobile Top Bar */}
-      <div style={{ alignItems: 'center', gap: '16px', width: '100%', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }} className="menu-toggle">
+      <div className="menu-toggle" style={{ width: '100%', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '12px', alignItems: 'center', gap: '16px' }}>
         <button 
           className="menu-toggle" 
           onClick={onToggleSidebar}
@@ -66,20 +58,13 @@ export function MarketHeader({
         </div>
       </div>
 
-      {/* Main Tabs (Moved to left) */}
-      <div className="main-tabs" role="tablist" style={{ 
-        margin: 0, 
-        display: 'flex', 
-        gap: '8px', 
-        background: 'transparent',
-        padding: 0
-      }}>
+      {/* Main Tabs */}
+      <div className="main-tabs" role="tablist">
         <button 
           role="tab" 
           aria-selected={currentTab === 'market'} 
           className={`main-tab ${currentTab === 'market' ? 'active' : ''}`} 
           onClick={() => onTabChange('market')}
-          style={{ padding: '8px 24px', borderRadius: '30px' }}
         >
           Mercado
         </button>
@@ -88,7 +73,6 @@ export function MarketHeader({
           aria-selected={currentTab === 'crafting'} 
           className={`main-tab ${currentTab === 'crafting' ? 'active' : ''}`} 
           onClick={() => onTabChange('crafting')}
-          style={{ padding: '8px 24px', borderRadius: '30px' }}
         >
           Crafting
         </button>
@@ -97,15 +81,14 @@ export function MarketHeader({
           aria-selected={currentTab === 'blackmarket'} 
           className={`main-tab ${currentTab === 'blackmarket' ? 'active' : ''}`} 
           onClick={() => onTabChange('blackmarket')}
-          style={{ padding: '8px 24px', borderRadius: '30px' }}
         >
           Mercado Negro
         </button>
       </div>
 
-      {/* Search Bar (Centered) */}
-      <div className="search-bar-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-        <div className="search-wrapper" style={{ width: '100%', maxWidth: '400px' }}>
+      {/* Search Bar */}
+      <div className="search-bar-container">
+        <div className="search-wrapper">
           <span className="search-icon" aria-hidden>🔍</span>
           <input
             type="search"
@@ -157,8 +140,8 @@ export function MarketHeader({
       </div>
 
       {/* Servers and Gold */}
-      <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <div className="server-tabs" role="tablist" aria-label="Região" style={{ background: 'var(--bg-secondary)', padding: '4px', borderRadius: '8px' }}>
+      <div className="header-actions">
+        <div className="server-tabs" role="tablist" aria-label="Região">
           {REGION_ORDER.map((r) => (
             <button
               key={r}
@@ -167,7 +150,6 @@ export function MarketHeader({
               aria-selected={region === r}
               className={`server-tab ${region === r ? 'active' : ''}`}
               onClick={() => onRegionChange(r)}
-              style={{ padding: '6px 12px', fontSize: '14px' }}
               title={r.toUpperCase()}
             >
               {REGION_LABEL[r]}
@@ -175,7 +157,7 @@ export function MarketHeader({
           ))}
         </div>
 
-        <div className="gold-ticker" title="Preço do ouro (prata por 1 ouro)" style={{ marginLeft: '8px' }}>
+        <div className="gold-ticker" title="Preço do ouro (prata por 1 ouro)">
           <span className="gold-ticker-icon" aria-hidden>🥇</span>
           <div className="gold-ticker-info">
             <div className="gold-ticker-label">Gold</div>
