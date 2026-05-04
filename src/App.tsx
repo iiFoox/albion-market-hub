@@ -270,7 +270,7 @@ export default function App() {
           isSidebarOpen={isSidebarOpen}
         />
 
-        <div className="main-content-scroll" style={{ padding: 'min(32px, 4vw)', flex: 1, overflowY: 'auto' }}>
+        <div className="main-content-scroll" style={{ padding: '32px', flex: 1, overflowY: 'auto' }}>
           {loadingCatalog && (
             <div className="catalog-load-banner glass-panel" role="status" style={{ marginBottom: '24px' }}>
               <div className="catalog-load-track">
@@ -303,7 +303,7 @@ export default function App() {
                 sidebarGroup={sidebarGroup}
                 filteredCount={filteredItems.length}
               />
-              <div className="browse-panel glass-panel" style={{ padding: 'min(24px, 5vw)', borderRadius: '16px' }}>
+              <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
                 <h3 style={{ margin: '0 0 24px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--gold)' }}>Lista de itens</h3>
                 <BrowseItemList key="market-list" items={filteredItems} onPickItem={pickItem} />
               </div>
@@ -340,7 +340,7 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              <div className="browse-panel glass-panel" style={{ padding: 'min(24px, 5vw)', borderRadius: '16px' }}>
+              <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
                   <h3 style={{ margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--gold)' }}>
                     Itens Craftáveis
