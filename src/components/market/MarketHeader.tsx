@@ -38,13 +38,12 @@ export function MarketHeader({
   return (
     <header className="app-header" style={{ padding: 'min(24px, 4vw)' }}>
       {/* Mobile Top Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }} className="menu-toggle">
+      <div style={{ alignItems: 'center', gap: '16px', width: '100%', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }} className="menu-toggle">
         <button 
           className="menu-toggle" 
           onClick={onToggleSidebar}
           aria-label={isSidebarOpen ? "Fechar filtros" : "Abrir filtros"}
           aria-expanded={isSidebarOpen}
-          style={{ display: 'flex' }}
         >
           {isSidebarOpen ? '✕' : '☰'}
         </button>
