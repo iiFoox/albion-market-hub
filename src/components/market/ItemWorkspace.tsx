@@ -118,7 +118,7 @@ export function ItemWorkspace({
         </button>
       )}
       {/* Hero Header */}
-      <div style={{
+      <div className="item-header-responsive" style={{
         display: 'flex',
         gap: '32px',
         alignItems: 'flex-start',
@@ -145,6 +145,7 @@ export function ItemWorkspace({
           <img 
             src={`https://render.albiononline.com/v1/item/${resolvedItemId}.png?quality=${quality}`}
             alt={item.name}
+            className="item-icon-box-large"
             style={{ width: '120px', height: '120px', objectFit: 'contain', filter: `drop-shadow(0 0 20px ${tierColor}80)` }}
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
@@ -152,8 +153,8 @@ export function ItemWorkspace({
           />
         </div>
 
-        <div style={{ flex: 1, zIndex: 1 }}>
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '8px' }}>
+        <div className="item-header-info" style={{ flex: 1, zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div className="item-meta-responsive" style={{ display: 'flex', gap: '12px', marginBottom: '8px', flexWrap: 'wrap' }}>
             <span style={{ 
               background: `${tierColor}20`, 
               color: tierColor, 
@@ -181,7 +182,7 @@ export function ItemWorkspace({
             }}>{resolvedItemId}</span>
           </div>
 
-          <h2 style={{ 
+          <h2 className="item-title-responsive" style={{ 
             fontSize: '48px', 
             margin: '0 0 24px 0', 
             fontFamily: 'var(--font-heading)',
@@ -192,10 +193,14 @@ export function ItemWorkspace({
             {item.name} <span style={{ color: 'var(--gold)' }}>{enchantLevel > 0 ? `.${enchantLevel}` : ''}</span>
           </h2>
 
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'inherit' }}>
             {/* Tier Selector */}
             {onSwitchTier && tier > 0 && (
-              <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+              <div 
+                style={{ display: 'flex', gap: '4px', background: 'var(--bg-card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border)', flexWrap: 'wrap' }}
+                role="group"
+                aria-label="Selecionar Tier"
+              >
                 {[4, 5, 6, 7, 8].map(t => (
                   <button
                     key={t}
@@ -220,7 +225,11 @@ export function ItemWorkspace({
             )}
 
             {/* Enchant Selector */}
-            <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div 
+              style={{ display: 'flex', gap: '4px', background: 'var(--bg-card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border)', flexWrap: 'wrap' }}
+              role="group"
+              aria-label="Selecionar Encantamento"
+            >
               {ENCHANT_LABELS.map((lbl, idx) => (
                 <button
                   key={idx}
@@ -247,7 +256,7 @@ export function ItemWorkspace({
       </div>
 
       {/* Brutalist Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+      <div className="responsive-grid-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
         <div className="glass-panel glow-hover" style={{ padding: '24px', borderRadius: '16px' }}>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Menor Venda (Global)</div>
           <div style={{ fontSize: '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--gold-light)' }}>
@@ -330,7 +339,7 @@ export function ItemWorkspace({
             </select>
           </div>
         </div>
-        <div id="priceTableContainer">
+        <div id="priceTableContainer" className="price-table-container">
           {loadingPrices && (
             <div className="loading-state">
               <div className="spinner" />

@@ -193,8 +193,29 @@ export default function App() {
     }
   }, [selected, catalog]);
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+  const closeSidebar = () => setIsSidebarOpen(false);
+
+  useEffect(() => {
+    // Fechar sidebar ao trocar de aba ou selecionar item no mobile
+    closeSidebar();
+  }, [currentTab, selected]);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeSidebar();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
   return (
-    <div className="app-container">
+    <div className={`app-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      {/* Overlay para mobile */}
+      <div className="sidebar-overlay" onClick={closeSidebar} />
+
       <aside className="app-sidebar-area">
         <div style={{ padding: '32px 24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '32px', height: '32px' }}>
@@ -205,6 +226,15 @@ export default function App() {
            <h1 style={{ fontSize: '20px', margin: 0, fontWeight: 800, letterSpacing: '1px', color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
              Albion<span style={{color: 'var(--gold)'}}>Market</span>
            </h1>
+           {/* Botão de fechar (mobile) */}
+           <button 
+             className="menu-toggle" 
+             onClick={closeSidebar}
+             style={{ marginLeft: 'auto' }}
+             aria-label="Fechar menu"
+           >
+             ✕
+           </button>
         </div>
         <div style={{ padding: '0 24px' }}>
           <MarketSidebar
@@ -236,9 +266,11 @@ export default function App() {
           gold={gold}
           currentTab={currentTab}
           onTabChange={setCurrentTab as any}
+          onToggleSidebar={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
         />
 
-        <div style={{ padding: '32px', flex: 1, overflowY: 'auto' }}>
+        <div className="main-content-scroll" style={{ padding: 'min(32px, 4vw)', flex: 1, overflowY: 'auto' }}>
           {loadingCatalog && (
             <div className="catalog-load-banner glass-panel" role="status" style={{ marginBottom: '24px' }}>
               <div className="catalog-load-track">
@@ -271,7 +303,7 @@ export default function App() {
                 sidebarGroup={sidebarGroup}
                 filteredCount={filteredItems.length}
               />
-              <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
+              <div className="browse-panel glass-panel" style={{ padding: 'min(24px, 5vw)', borderRadius: '16px' }}>
                 <h3 style={{ margin: '0 0 24px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--gold)' }}>Lista de itens</h3>
                 <BrowseItemList key="market-list" items={filteredItems} onPickItem={pickItem} />
               </div>
@@ -308,8 +340,8 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <div className="browse-panel glass-panel" style={{ padding: 'min(24px, 5vw)', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
                   <h3 style={{ margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--gold)' }}>
                     Itens Craftáveis
                   </h3>
