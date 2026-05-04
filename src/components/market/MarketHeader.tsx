@@ -134,7 +134,7 @@ export function MarketHeader({
                       <div className="result-name">{item.name}</div>
                       <div className="result-category">{item.category} · T{item.tier || '?'}</div>
                     </div>
-                    <div className="result-id" style={{ marginLeft: 'auto', flexShrink: 0 }}>{item.id}</div>
+                    <div className="result-id" style={{ marginLeft: 'auto', flexShrink: 0 }}>{item.name} · T{item.tier || '?'}</div>
                   </button>
                 ))
               )}

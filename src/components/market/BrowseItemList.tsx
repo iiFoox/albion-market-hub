@@ -97,7 +97,7 @@ export function BrowseItemList({ items, onPickItem }: Props) {
             className="browse-row__id"
             style={{ marginLeft: 'auto', flexShrink: 0, fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--gold-dim)', background: 'rgba(0,0,0,0.3)', padding: '3px 8px', borderRadius: '4px' }}
           >
-            {item.id}
+            {item.name}
           </code>
         </button>
       ))}

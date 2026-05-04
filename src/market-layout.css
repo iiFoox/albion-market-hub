@@ -812,6 +812,7 @@ img, video, svg {
   color: var(--gold);
   margin-bottom: 10px;
   font-weight: 700;
+  text-align: center;
 }
 
 .welcome-sub {
@@ -822,6 +823,7 @@ img, video, svg {
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
+  text-align: center;
 }
 
 .welcome-hint {

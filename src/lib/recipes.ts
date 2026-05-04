@@ -46,6 +46,19 @@ const INGREDIENT_NAME_MAP: Record<string, string> = {
   T1_LEATHER: 'Couro T1', T2_LEATHER: 'Couro T2', T3_LEATHER: 'Couro T3',
   T4_LEATHER: 'Couro T4', T5_LEATHER: 'Couro T5', T6_LEATHER: 'Couro T6',
   T7_LEATHER: 'Couro T7', T8_LEATHER: 'Couro T8',
+  // Diários (Journals) - Artefatos para encantamento
+  T4_JOURNAL_ARTEFACT_UP_1: 'Diário Artefato T4 UP 1', T5_JOURNAL_ARTEFACT_UP_1: 'Diário Artefato T5 UP 1',
+  T6_JOURNAL_ARTEFACT_UP_1: 'Diário Artefato T6 UP 1', T7_JOURNAL_ARTEFACT_UP_1: 'Diário Artefato T7 UP 1',
+  T8_JOURNAL_ARTEFACT_UP_1: 'Diário Artefato T8 UP 1',
+  T4_JOURNAL_ARTEFACT_UP_2: 'Diário Artefato T4 UP 2', T5_JOURNAL_ARTEFACT_UP_2: 'Diário Artefato T5 UP 2',
+  T6_JOURNAL_ARTEFACT_UP_2: 'Diário Artefato T6 UP 2', T7_JOURNAL_ARTEFACT_UP_2: 'Diário Artefato T7 UP 2',
+  T8_JOURNAL_ARTEFACT_UP_2: 'Diário Artefato T8 UP 2',
+  T4_JOURNAL_ARTEFACT_UP_3: 'Diário Artefato T4 UP 3', T5_JOURNAL_ARTEFACT_UP_3: 'Diário Artefato T5 UP 3',
+  T6_JOURNAL_ARTEFACT_UP_3: 'Diário Artefato T6 UP 3', T7_JOURNAL_ARTEFACT_UP_3: 'Diário Artefato T7 UP 3',
+  T8_JOURNAL_ARTEFACT_UP_3: 'Diário Artefato T8 UP 3',
+  T4_JOURNAL_ARTEFACT_UP_4: 'Diário Artefato T4 UP 4', T5_JOURNAL_ARTEFACT_UP_4: 'Diário Artefato T5 UP 4',
+  T6_JOURNAL_ARTEFACT_UP_4: 'Diário Artefato T6 UP 4', T7_JOURNAL_ARTEFACT_UP_4: 'Diário Artefato T7 UP 4',
+  T8_JOURNAL_ARTEFACT_UP_4: 'Diário Artefato T8 UP 4',
   // Pedra
   T1_ROCK: 'Pedra T1', T2_ROCK: 'Pedra T2', T3_ROCK: 'Pedra T3',
   T4_ROCK: 'Pedra T4', T5_ROCK: 'Pedra T5', T6_ROCK: 'Pedra T6',
@@ -128,8 +141,10 @@ const ALL_RECIPES = [...BASIC_REFINING];
 const WEAPON_ARMOR_PATTERNS = [
   '_2H_', '_MAIN_', '_OFF_',
   '_ARMOR_', '_HEAD_', '_SHOES_',
-  '_CAPE', '_BAG',
-  '_POTION_', '_MEAL_'
+  '_CAPE', '_CAPE_', '_BAG', '_BAG_',
+  '_POTION_', '_MEAL_', '_FOOD_',
+  '_SHIELD', '_BOOK', '_ORB', '_TORCH', '_MACE_OFF',
+  'TOME', 'SKILLBOOK'
 ];
 
 function isCraftableByHeuristic(id: string): boolean {
@@ -155,8 +170,8 @@ export function getRecipe(baseId: string, enchantLevel: number): Recipe | null {
       const isHead = baseId.includes('_HEAD_');
       const isShoes = baseId.includes('_SHOES_');
       const isOff = baseId.includes('_OFF_');
-      const isCape = baseId.includes('_CAPE');
-      const isBag = baseId.includes('_BAG');
+      const isCape = baseId.includes('_CAPE') || baseId.includes('CAPE_');
+      const isBag = baseId.includes('_BAG') || baseId.includes('BAG_');
 
       let primary = '';
       let secondary = '';
@@ -206,13 +221,17 @@ export function getRecipe(baseId: string, enchantLevel: number): Recipe | null {
         if (baseId.includes('PLATE')) { primary = 'METALBAR'; }
         else if (baseId.includes('LEATHER')) { primary = 'LEATHER'; }
         else if (baseId.includes('CLOTH')) { primary = 'CLOTH'; }
-        else if (baseId.includes('SWORD') || baseId.includes('AXE') || baseId.includes('MACE') || baseId.includes('KNUCKLE')) { primary = 'METALBAR'; secondary = 'LEATHER'; }
+        else if (baseId.includes('SWORD') || baseId.includes('KNIFE') || baseId.includes('KNUCKLE')) { primary = 'METALBAR'; secondary = 'LEATHER'; }
+        else if (baseId.includes('AXE') || baseId.includes('HAMMER') || baseId.includes('MACE')) { primary = 'METALBAR'; secondary = 'LEATHER'; }
         else if (baseId.includes('BOW') || baseId.includes('CROSSBOW')) { primary = 'PLANKS'; secondary = 'METALBAR'; }
-        else if (baseId.includes('STAFF') || baseId.includes('MAGIC') || baseId.includes('TOME') || baseId.includes('ORB')) { primary = 'PLANKS'; secondary = 'CLOTH'; }
-        else if (baseId.includes('DAGGER') || baseId.includes('SPEAR')) { primary = 'METALBAR'; secondary = 'PLANKS'; }
-        else if (baseId.includes('HAMMER') || baseId.includes('MACE')) { primary = 'METALBAR'; secondary = 'CLOTH'; }
+        else if (baseId.includes('STAFF') || baseId.includes('CURSED') || baseId.includes('FIRE') || baseId.includes('FROST') || baseId.includes('ARCANE') || baseId.includes('HOLY') || baseId.includes('NATURE') || baseId.includes('ENERGY')) { primary = 'PLANKS'; secondary = 'CLOTH'; }
+        else if (baseId.includes('QUARTERSTAFF') || baseId.includes('COMBATSTAFF') || baseId.includes('ROCK_STAFF')) { primary = 'PLANKS'; secondary = 'CLOTH'; }
+        else if (baseId.includes('SHAPESHIFTER')) { primary = 'LEATHER'; secondary = 'CLOTH'; }
+        else if (baseId.includes('DAGGER') || baseId.includes('SPEAR') || baseId.includes('GLAIVE') || baseId.includes('HALBERD')) { primary = 'METALBAR'; secondary = 'PLANKS'; }
         else if (isCape) { primary = 'CLOTH'; secondary = 'LEATHER'; }
         else if (isBag) { primary = 'LEATHER'; }
+        else if (baseId.includes('SHIELD') || baseId.includes('OFF_')) { primary = 'METALBAR'; secondary = 'PLANKS'; }
+        else if (baseId.includes('BOOK') || baseId.includes('ORB') || baseId.includes('TORCH')) { primary = 'CLOTH'; secondary = 'PLANKS'; }
         else { primary = 'METALBAR'; } // generic weapon fallback
 
         // Quantity by slot
@@ -229,6 +248,17 @@ export function getRecipe(baseId: string, enchantLevel: number): Recipe | null {
 
       if (pCount > 0) ingredients.push({ id: `T${tier}_${primary}`, count: pCount });
       if (sCount > 0 && secondary) ingredients.push({ id: `T${tier}_${secondary}`, count: sCount });
+
+      // Add journals for enchanting (T4+ items can be enchanted)
+      if (parseInt(tier, 10) >= 4 && enchantLevel > 0) {
+        // Journal types in Albion: T4_JOURNAL_ARTEFACT_UP_1, etc.
+        const journalBase = `T${tier}_JOURNAL_ARTEFACT`;
+        // Estimate journal count based on enchant level and item complexity
+        const journalCount = is2H ? (4 * enchantLevel) : (isMain || isArmor) ? (2 * enchantLevel) : (1 * enchantLevel);
+        if (journalCount > 0) {
+          ingredients.push({ id: `${journalBase}_UP_${enchantLevel}`, count: journalCount });
+        }
+      }
 
       if (ingredients.length > 0) {
         recipe = { itemId: baseId, ingredients };

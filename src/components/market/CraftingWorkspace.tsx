@@ -189,13 +189,13 @@ export function CraftingWorkspace({ item, region, enchantLevel, onEnchantLevel, 
                     <img src={`https://render.albiononline.com/v1/item/${ing.id}.png?size=48`}
                       style={{ width: '32px', height: '32px', borderRadius: '4px', background: 'rgba(0,0,0,0.2)' }} alt=""
                       onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, textAlign: 'center' }}>
                       <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '14px' }}>{getIngredientName(ing.id)}</div>
-                      <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{ing.id}</div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{getIngredientName(ing.id)}</div>
                     </div>
                     <div style={{ fontWeight: 800, color: 'var(--gold)', fontSize: '14px' }}>{ing.count}×</div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', background: 'rgba(0,0,0,0.2)', padding: '6px 10px', borderRadius: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', background: 'rgba(0,0,0,0.2)', padding: '6px 10px', borderRadius: '6px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: CITY_COLORS[ing.sourceCity] ?? '#888' }} />
                       <span style={{ fontWeight: 600, color: CITY_COLORS[ing.sourceCity] ?? 'var(--text-muted)' }}>{ing.sourceCity}</span>
@@ -212,9 +212,9 @@ export function CraftingWorkspace({ item, region, enchantLevel, onEnchantLevel, 
             <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '14px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Ingrediente</th>
+                  <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'center' }}>Ingrediente</th>
                   <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'center' }}>Qtd</th>
-                  {useBestCity && <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Comprar em</th>}
+                  {useBestCity && <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'center' }}>Comprar em</th>}
                   <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Preço Unit.</th>
                   <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Custo Total</th>
                 </tr>
@@ -226,14 +226,14 @@ export function CraftingWorkspace({ item, region, enchantLevel, onEnchantLevel, 
                       <img src={`https://render.albiononline.com/v1/item/${ing.id}.png?size=48`}
                         style={{ width: '40px', height: '40px', borderRadius: '6px', background: 'rgba(0,0,0,0.2)' }} alt=""
                         onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '15px' }}>{getIngredientName(ing.id)}</span>
-                        <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{ing.id}</span>
+                        <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{getIngredientName(ing.id)}</span>
                       </div>
                     </td>
                     <td style={{ padding: '14px 0', textAlign: 'center', fontWeight: 700, color: 'var(--gold-dim)', fontSize: '15px' }}>{ing.count}×</td>
                     {useBestCity && (
-                      <td style={{ padding: '14px 0' }}>
+                      <td style={{ padding: '14px 0', textAlign: 'center' }}>
                         <span style={{ background: CITY_COLORS[ing.sourceCity] + '33', color: CITY_COLORS[ing.sourceCity] ?? 'var(--text-muted)', padding: '4px 10px', borderRadius: '5px', fontSize: '13px', fontWeight: 600, border: `1px solid ${CITY_COLORS[ing.sourceCity] ?? 'var(--border)'}44` }}>
                           {ing.sourceCity}
                         </span>
@@ -326,9 +326,12 @@ export function CraftingWorkspace({ item, region, enchantLevel, onEnchantLevel, 
             <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['Cidade de Venda','Custo Líquido','Preço de Venda','Lucro Líquido','ROI',''].map(h => (
-                    <th key={h} style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: h === '' ? 'center' : 'left' }}>{h}</th>
-                  ))}
+                  <th style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'left' }}>Cidade de Venda</th>
+                  <th style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Custo Líquido</th>
+                  <th style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Preço de Venda</th>
+                  <th style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Lucro Líquido</th>
+                  <th style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>ROI</th>
+                  <th style={{ padding: '10px 8px', color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center' }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -343,12 +346,12 @@ export function CraftingWorkspace({ item, region, enchantLevel, onEnchantLevel, 
                           <span style={{ fontWeight: 600, color: isBest ? '#4caf7d' : 'var(--text-primary)' }}>{city}</span>
                         </div>
                       </td>
-                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace' }}>{netCost ? formatPrice(netCost) : '—'}</td>
-                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace' }}>{targetPrice ? formatPrice(targetPrice) : '—'}</td>
-                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace', fontWeight: 700, color: (profit ?? 0) > 0 ? '#4caf7d' : '#c94c4c' }}>
+                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace', textAlign: 'right' }}>{netCost ? formatPrice(netCost) : '—'}</td>
+                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace', textAlign: 'right' }}>{targetPrice ? formatPrice(targetPrice) : '—'}</td>
+                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace', fontWeight: 700, color: (profit ?? 0) > 0 ? '#4caf7d' : '#c94c4c', textAlign: 'right' }}>
                         {targetPrice ? formatPrice(profit ?? 0) : '—'}
                       </td>
-                      <td style={{ padding: '12px 8px', color: (margin ?? 0) > 0 ? '#4caf7d' : '#c94c4c', fontWeight: 600 }}>
+                      <td style={{ padding: '12px 8px', fontFamily: 'Share Tech Mono, monospace', color: (margin ?? 0) > 0 ? '#4caf7d' : '#c94c4c', fontWeight: 600, textAlign: 'right' }}>
                         {targetPrice ? `${(margin ?? 0).toFixed(1)}%` : '—'}
                       </td>
                       <td style={{ padding: '12px 8px', textAlign: 'center' }}>

@@ -312,10 +312,10 @@ export default function App() {
 
           {!selected && currentTab === 'crafting' && (
             <div className="browse-section" style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '1200px', margin: '0 auto', width: '100%', marginBottom: '60px' }}>
-              <div className="welcome-state glass-panel fade-in" style={{ padding: '32px 40px', borderRadius: '16px' }}>
+              <div style={{ padding: '32px 40px', borderRadius: '16px', textAlign: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
                 <span style={{ fontSize: '36px', display: 'block', marginBottom: '12px' }}>⚒️</span>
-                <h2 className="welcome-title" style={{ fontSize: '22px', margin: '0 0 8px 0' }}>Laboratório de Crafting</h2>
-                <p className="welcome-sub" style={{ color: 'var(--text-muted)', margin: 0 }}>
+                <h2 style={{ fontFamily: "'Cinzel', serif", fontSize: '22px', color: 'var(--gold)', margin: '0 0 8px 0', fontWeight: 700, textAlign: 'center' }}>Laboratório de Crafting</h2>
+                <p style={{ color: 'var(--text-muted)', margin: 0, textAlign: 'center', fontSize: '15px', lineHeight: 1.6, maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' }}>
                   Selecione um item craftável para abrir a <strong>Calculadora de Produção</strong> com análise de custo, retorno e lucro por cidade.
                 </p>
               </div>
