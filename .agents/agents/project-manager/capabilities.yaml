@@ -1,0 +1,24 @@
+# Project Manager Capabilities
+agent_id: project-manager
+capabilities:
+  - telemetry_collection_and_analysis
+  - performance_metrics_tracking
+  - framework_evolution_monitoring
+  - scope_and_priority_management
+  - technical_debt_tracking
+  - risk_register_maintenance
+  - sprint_milestone_planning
+  - progress_reporting
+  - retrospective_analysis
+  - growth_metrics_calculation
+  - agent_effectiveness_evaluation
+  - daily_weekly_monthly_reports
+
+specializations:
+  - telemetry_and_observability
+  - performance_analysis
+  - evolution_assessment
+  - project_oversight
+
+platforms: all
+technologies: all

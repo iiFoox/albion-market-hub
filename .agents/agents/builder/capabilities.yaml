@@ -1,0 +1,27 @@
+# Builder Capabilities
+agent_id: builder
+capabilities:
+  - production_code_generation
+  - multi_language_implementation
+  - cross_platform_adaptation
+  - refactoring_and_optimization
+  - version_control_management
+  - git_workflow_execution
+  - database_schema_implementation
+  - api_implementation
+  - ui_ux_implementation
+  - infrastructure_as_code
+  - cicd_pipeline_creation
+  - merge_conflict_resolution
+  - monorepo_management
+
+specializations:
+  - full_stack_development
+  - cross_platform_engineering
+  - database_engineering
+  - devops_and_infrastructure
+  - version_control
+
+platforms: all
+technologies: all
+databases: all

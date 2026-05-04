@@ -1,0 +1,24 @@
+# Validator Capabilities
+agent_id: validator
+capabilities:
+  - test_generation_unit_integration_e2e
+  - quality_gate_enforcement
+  - security_vulnerability_scanning
+  - regression_detection
+  - performance_validation
+  - accessibility_audit
+  - architecture_compliance_checking
+  - automated_code_review
+  - edge_case_identification
+  - error_handling_verification
+  - cross_platform_testing
+
+specializations:
+  - quality_assurance
+  - security_auditing
+  - performance_testing
+  - accessibility_compliance
+
+platforms: all
+technologies: all
+databases: all

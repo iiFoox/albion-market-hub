@@ -1,0 +1,19 @@
+id: "ui-feature"
+request: "Create a responsive profile screen with edit mode and loading states."
+expected:
+  min_level: "STANDARD"
+  workflow: "ui-workflow"
+  required_agents:
+    - "orchestrator"
+    - "planner"
+    - "builder"
+    - "ui-ux-specialist"
+    - "validator"
+  optional_agents:
+    - "documentation"
+    - "delivery"
+  forbidden_agents: []
+  triggers:
+    - "create"
+    - "screen"
+    - "responsive"

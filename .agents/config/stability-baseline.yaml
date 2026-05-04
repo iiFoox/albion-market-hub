@@ -1,0 +1,79 @@
+# =============================================================================
+# HEPHAESTUS Stability Baseline
+# =============================================================================
+# Compact regression baseline for critical framework capabilities.
+# Update only when a release intentionally changes the stable surface.
+# =============================================================================
+
+baseline:
+  version: "8.7.0"
+  source_release: "8.6.0"
+  name: "Practical First Project Walkthrough"
+
+minimum_counts:
+  agents: 10
+  protocols: 36
+  workflows: 12
+  docs_languages: 2
+
+cli_actions:
+  - "doctor"
+  - "validate"
+  - "gate"
+  - "package"
+  - "evidence"
+  - "compare"
+  - "install"
+  - "update"
+  - "daily"
+  - "bootstrap"
+
+critical_capabilities:
+  - id: "project_discovery"
+    config_marker: "project_discovery:"
+    checker: ".agents/tools/check-project-discovery.ps1"
+    protocol: ".agents/protocols/project-discovery-protocol.md"
+  - id: "real_project_adapter"
+    config_marker: "real_project_adapter:"
+    checker: ".agents/tools/check-real-project-adapter.ps1"
+    protocol: ".agents/protocols/real-project-adapter-protocol.md"
+  - id: "release_evidence_bundle"
+    config_marker: "release_evidence_bundle:"
+    checker: ".agents/tools/check-release-evidence-bundle.ps1"
+    protocol: ".agents/protocols/release-evidence-bundle-protocol.md"
+  - id: "unified_operator_cli"
+    config_marker: "unified_operator_cli:"
+    checker: ".agents/tools/check-unified-cli.ps1"
+    protocol: ".agents/protocols/unified-operator-cli-protocol.md"
+  - id: "core_contract_drift_guard"
+    config_marker: "core_contract_drift_guard:"
+    checker: ".agents/tools/check-core-contract.ps1"
+    protocol: ".agents/protocols/core-contract-drift-guard-protocol.md"
+  - id: "operator_daily_launcher"
+    config_marker: "operator_daily_launcher:"
+    checker: ".agents/tools/check-operator-daily-launcher.ps1"
+    protocol: ".agents/protocols/operator-daily-launcher-protocol.md"
+  - id: "project_bootstrap_assistant"
+    config_marker: "project_bootstrap_assistant:"
+    checker: ".agents/tools/check-project-bootstrap.ps1"
+    protocol: ".agents/protocols/project-bootstrap-assistant-protocol.md"
+  - id: "documentation_runtime_loop"
+    config_marker: "documentation_runtime_loop:"
+    checker: ".agents/tools/check-documentation-runtime-loop.ps1"
+    protocol: ".agents/protocols/documentation-runtime-loop-protocol.md"
+  - id: "memory_proof"
+    config_marker: "optional_telemetry_memory_proof:"
+    checker: ".agents/tools/check-memory-proof.ps1"
+    protocol: ".agents/protocols/optional-telemetry-memory-proof-protocol.md"
+  - id: "operator_runbook_recovery"
+    config_marker: "operator_runbook_recovery:"
+    checker: ".agents/tools/check-operator-runbook.ps1"
+    protocol: ".agents/protocols/operator-runbook-recovery-protocol.md"
+  - id: "guided_installer_repository_onboarding"
+    config_marker: "guided_installer_repository_onboarding:"
+    checker: ".agents/tools/check-guided-installer.ps1"
+    protocol: ".agents/protocols/guided-installer-repository-onboarding-protocol.md"
+  - id: "practical_first_project_walkthrough"
+    config_marker: "practical_first_project_walkthrough:"
+    checker: ".agents/tools/check-first-project-walkthrough.ps1"
+    protocol: ".agents/protocols/practical-first-project-walkthrough-protocol.md"

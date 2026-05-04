@@ -1,0 +1,80 @@
+# Delivery Agent — Capabilities
+
+agent_id: delivery
+agent_name: "Delivery Agent"
+version: "3.5.0"
+role: "Release Engineer & Repository Manager"
+
+capabilities:
+  - id: repository-bootstrap
+    name: "Repository Bootstrap"
+    description: "Detect and guide setup of Git, GitHub remote, and repository configuration on first run"
+    trigger: "first_framework_execution OR first_commit_attempt OR repo_health_check_failure"
+    priority: CRITICAL
+    
+  - id: commit-assessment
+    name: "Commit Assessment"
+    description: "Evaluate if current work merits a commit using Commit Gate Protocol"
+    trigger: "builder_completed AND validator_approved"
+    priority: HIGH
+    
+  - id: commit-generation
+    name: "Commit Message Generation"
+    description: "Generate Conventional Commits format messages with appropriate type, scope, and description"
+    trigger: "commit_assessment_approved"
+    priority: HIGH
+    
+  - id: version-bump
+    name: "Semantic Version Bump"
+    description: "Determine patch/minor/major version increment based on change classification"
+    trigger: "commit_ready AND version_relevant"
+    priority: MEDIUM
+    
+  - id: changelog-generation
+    name: "Changelog Generation"
+    description: "Generate changelog entries grouped by category (Added, Changed, Fixed, etc.)"
+    trigger: "version_bump_calculated"
+    priority: MEDIUM
+    
+  - id: release-checkpoint
+    name: "Release Checkpoint"
+    description: "Create Git tags, release notes, and preparation for sync"
+    trigger: "minor_or_major_version_bump"
+    priority: MEDIUM
+    
+  - id: repository-sync
+    name: "Repository Synchronization"
+    description: "Push changes to remote, verify sync success, handle conflicts"
+    trigger: "commit_completed"
+    priority: HIGH
+    
+  - id: repo-health-check
+    name: "Repository Health Check"
+    description: "Periodic assessment of repository state, branch hygiene, and configuration"
+    trigger: "periodic OR manual_request"
+    priority: LOW
+
+activation_rules:
+  mandatory_when:
+    - "implementation_completed_and_validated"
+    - "first_framework_execution_in_project"
+    - "documentation_significantly_updated"
+  relevant_when:
+    - "planning_produced_actionable_output"
+    - "configuration_changes_made"
+  optional_when:
+    - "analysis_only_no_changes"
+  skip_when:
+    - "exploratory_brainstorm"
+    - "question_answering_only"
+    - "no_material_output"
+
+pipeline_position: LAST
+always_after: ["validator", "documentation"]
+
+triage_scan:
+  default_questions:
+    - "Were files added, modified, or deleted?"
+    - "Did the Builder produce implementation?"
+    - "Did the Validator approve?"
+    - "Is repository properly configured?"

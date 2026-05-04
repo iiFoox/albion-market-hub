@@ -1,0 +1,22 @@
+# Orchestrator Capabilities
+agent_id: orchestrator
+capabilities:
+  - request_analysis
+  - agent_self_evaluation_coordination
+  - pipeline_assembly
+  - pipeline_execution_monitoring
+  - inter_agent_communication_routing
+  - conflict_detection_and_resolution
+  - user_interaction_management
+  - helper_assistance
+  - emergency_management
+  - memory_consultation
+
+specializations:
+  - pipeline_coordination
+  - workflow_selection
+  - conflict_mediation
+  - user_communication_pt_br
+
+platforms: all
+technologies: all (classification level, not implementation level)

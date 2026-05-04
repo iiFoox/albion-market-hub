@@ -1,0 +1,184 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Agent Registry (Lean)
+# =============================================================================
+# This file contains ONLY routing metadata: IDs, paths, activation triggers,
+# and pipeline order. Full agent specs are in each agent's AGENT.md file.
+# =============================================================================
+
+registry:
+  version: "8.7.0"
+  total_agents: 10
+  shared_systems: 1
+
+# -----------------------------------------------------------------------------
+# Agent Routing Table
+# -----------------------------------------------------------------------------
+agents:
+
+  orchestrator:
+    id: "orchestrator"
+    definition: ".agents/agents/orchestrator/AGENT.md"
+    always_active: true
+    priority: 0
+    role: "Pipeline coordination, triage, auto-escalation"
+
+  researcher:
+    id: "researcher"
+    definition: ".agents/agents/researcher/AGENT.md"
+    always_active: false
+    priority: 1
+    role: "Context analysis, technology research, risk assessment"
+    activation_triggers:
+      - "New feature requests"
+      - "Project discovery and requirements maturation"
+      - "Technology selection"
+      - "Architecture changes"
+      - "Unknown domains"
+      - "Complex bug investigation"
+      - "Real project adapter review"
+
+  planner:
+    id: "planner"
+    definition: ".agents/agents/planner/AGENT.md"
+    always_active: false
+    priority: 2
+    role: "Task decomposition, strategy design, acceptance criteria"
+    activation_triggers:
+      - "Multi-step implementations"
+      - "MVP and product direction planning"
+      - "Architecture design"
+      - "Complex features"
+      - "Migration planning"
+      - "Real project quality gate planning"
+
+  builder:
+    id: "builder"
+    definition: ".agents/agents/builder/AGENT.md"
+    always_active: false
+    priority: 3
+    role: "Implementation, refactoring, version control"
+    activation_triggers:
+      - "Code creation or modification"
+      - "Bug fixes"
+      - "Refactoring"
+      - "Platform adaptation"
+      - "Infrastructure changes"
+      - "Adapter-bounded project edits"
+      - "Approved real-project execution"
+
+  ui-ux-specialist:
+    id: "ui-ux-specialist"
+    definition: ".agents/agents/ui-ux-specialist/AGENT.md"
+    always_active: false
+    priority: 4
+    role: "Design systems, responsive UI, accessibility, visual performance"
+    activation_triggers:
+      - "UI/UX work (screens, layouts, themes)"
+      - "Design tokens or design system"
+      - "Accessibility requirements"
+      - "Visual performance (scroll, lists, animations)"
+      - "Responsive/adaptive design"
+
+  platform-guardian:
+    id: "platform-guardian"
+    definition: ".agents/agents/platform-guardian/AGENT.md"
+    always_active: false
+    priority: 5
+    role: "Cross-platform compatibility, known issues, plugin health"
+    activation_triggers:
+      - "Multi-platform deployment"
+      - "Platform-specific bugs"
+      - "Plugin/package compatibility"
+      - "Build pipeline issues"
+
+  validator:
+    id: "validator"
+    definition: ".agents/agents/validator/AGENT.md"
+    always_active: false
+    priority: 6
+    role: "Testing, quality gates, security audit, regression checking"
+    activation_triggers:
+      - "Code review needed"
+      - "Security assessment"
+      - "Quality gate check"
+      - "Regression testing"
+      - "Real project adapter validation"
+      - "Real project execution validation"
+
+  documentation:
+    id: "documentation"
+    definition: ".agents/agents/documentation/AGENT.md"
+    always_active: true
+    priority: 7
+    role: "Continuous documentation enforcement, API reference, changelogs"
+    activation_triggers:
+      - "API changes"
+      - "Architecture changes"
+      - "New features documented"
+      - "README updates"
+
+  project-manager:
+    id: "project-manager"
+    definition: ".agents/agents/project-manager/AGENT.md"
+    always_active: false
+    priority: 8
+    role: "Scope management, telemetry, evolution tracking"
+    activation_triggers:
+      - "Scope creep risk"
+      - "Project discovery readiness"
+      - "Performance analysis"
+      - "Evolution milestones"
+      - "Project health check"
+      - "Adapter readiness review"
+
+  delivery:
+    id: "delivery"
+    definition: ".agents/agents/delivery/AGENT.md"
+    always_active: false
+    priority: 9
+    role: "Commit gating, release engineering, session closing"
+    activation_triggers:
+      - "Work ready to commit"
+      - "Release preparation"
+      - "Session closing (triggers session-closing-protocol)"
+
+# -----------------------------------------------------------------------------
+# Shared Systems
+# -----------------------------------------------------------------------------
+shared_systems:
+
+  memory:
+    id: "memory"
+    definition: ".agents/memory/MEMORY.md"
+    role: "Knowledge graph, learning store, evolution log, context database"
+    stores:
+      - { name: "Knowledge Graph", path: ".agents/memory/knowledge-graph/" }
+      - { name: "Learning Store", path: ".agents/memory/learning-store/" }
+      - { name: "Evolution Log", path: ".agents/memory/evolution-log/" }
+      - { name: "Context DB", path: ".agents/memory/context-db/" }
+    accessed_by: ["all agents"]
+
+# -----------------------------------------------------------------------------
+# Pipeline Execution Order
+# -----------------------------------------------------------------------------
+pipeline_order:
+  description: >
+    Default execution order. Self-evaluation occurs before pipeline runs.
+    Not all agents run every time — only those activated by triage.
+  order:
+    - { agent: "orchestrator", phase: "coordination", mandatory: true }
+    - { agent: "researcher", phase: "analysis", mandatory: false }
+    - { agent: "planner", phase: "design", mandatory: false }
+    - { agent: "builder", phase: "implementation", mandatory: false }
+    - { agent: "ui-ux-specialist", phase: "design-review", mandatory: false }
+    - { agent: "platform-guardian", phase: "platform-check", mandatory: false }
+    - { agent: "validator", phase: "verification", mandatory: false }
+    - { agent: "documentation", phase: "documentation", mandatory: true }
+    - { agent: "project-manager", phase: "oversight", mandatory: false }
+    - { agent: "delivery", phase: "persistence", mandatory: false }
+
+
+
+
+
+

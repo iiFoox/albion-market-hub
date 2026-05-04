@@ -1,0 +1,26 @@
+# Planner Capabilities
+agent_id: planner
+capabilities:
+  - task_decomposition
+  - execution_order_optimization
+  - strategy_selection
+  - acceptance_criteria_definition
+  - trade_off_analysis
+  - scope_boundary_enforcement
+  - risk_aware_planning
+  - rollback_strategy_design
+  - parallel_execution_identification
+  - dependency_chain_analysis
+  - architecture_design
+  - api_contract_design
+  - database_schema_design
+
+specializations:
+  - strategic_planning
+  - architecture_design
+  - scope_management
+  - trade_off_evaluation
+
+platforms: all
+technologies: all
+databases: all

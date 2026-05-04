@@ -1,0 +1,113 @@
+# Triage Rules — Agent Relevance Configuration
+
+# These rules define when each agent is relevant to a request.
+# Used by the Universal Triage Protocol.
+# Each agent evaluates itself against these rules during triage scan.
+
+agents:
+
+  orchestrator:
+    always_active: true
+    role: "Routes and coordinates all pipelines"
+    skip_triage: true  # Orchestrator IS the triage coordinator
+
+  researcher:
+    relevance_signals:
+      CRITICAL:
+        - "new technology or library being evaluated"
+        - "unfamiliar domain or architecture"
+        - "risk assessment needed"
+        - "multiple viable approaches to compare"
+      RELEVANT:
+        - "existing technology but unusual use case"
+        - "performance or security concern"
+      OPTIONAL:
+        - "well-known technology, standard use case"
+      NOT_NEEDED:
+        - "simple bug fix with known solution"
+        - "UI styling change"
+        - "documentation-only change"
+
+  planner:
+    relevance_signals:
+      CRITICAL:
+        - "multi-step feature requiring decomposition"
+        - "architectural decision needed"
+        - "project kickoff or new module"
+      RELEVANT:
+        - "medium feature with 2+ files affected"
+        - "refactoring with dependencies"
+      OPTIONAL:
+        - "small feature with clear scope"
+      NOT_NEEDED:
+        - "single-file bug fix"
+        - "config change"
+        - "documentation update"
+
+  builder:
+    relevance_signals:
+      CRITICAL:
+        - "any request requiring code changes"
+        - "implementation of any feature or fix"
+      RELEVANT:
+        - "configuration changes"
+        - "dependency updates"
+      OPTIONAL:
+        - "documentation with code examples"
+      NOT_NEEDED:
+        - "pure research or analysis"
+        - "project management only"
+
+  validator:
+    relevance_signals:
+      CRITICAL:
+        - "security-related change"
+        - "payment or financial logic"
+        - "authentication or authorization change"
+        - "database schema change"
+      RELEVANT:
+        - "any new feature implementation"
+        - "API endpoint change"
+        - "business logic change"
+      OPTIONAL:
+        - "UI styling change"
+        - "documentation update"
+      NOT_NEEDED:
+        - "pure research"
+        - "planning only"
+
+  documentation:
+    relevance_signals:
+      CRITICAL:
+        - "new API endpoint created"
+        - "breaking change introduced"
+        - "architectural decision made"
+      RELEVANT:
+        - "new feature implemented"
+        - "behavior changed"
+      OPTIONAL:
+        - "bug fix"
+        - "refactoring without behavior change"
+      NOT_NEEDED:
+        - "pure styling change"
+        - "dependency update (minor)"
+
+  project-manager:
+    always_active: true
+    role: "Observes all pipelines for telemetry and evolution"
+    minimum_mode: "lite"  # Always at least observes
+
+  delivery:
+    relevance_signals:
+      CRITICAL:
+        - "first framework execution (bootstrap needed)"
+        - "implementation completed and validated"
+      RELEVANT:
+        - "documentation significantly updated"
+        - "configuration changed"
+      OPTIONAL:
+        - "planning produced actionable output"
+      NOT_NEEDED:
+        - "pure research or analysis"
+        - "exploratory brainstorm"
+        - "question answering only"

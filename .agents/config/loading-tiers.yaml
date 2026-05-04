@@ -1,0 +1,382 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Smart Loading Tier Manifest
+# =============================================================================
+# This manifest makes context loading auditable. It is intentionally explicit:
+# normal tasks should load tiers and deltas, not the entire framework.
+# =============================================================================
+
+manifest:
+  version: "8.7.0"
+  protocol: ".agents/protocols/smart-loading-protocol.md"
+  estimator: ".agents/tools/estimate-loading.ps1"
+  token_estimate_rule: "approx_tokens = ceiling(bytes / 4)"
+
+core:
+  description: "Always loaded for every tier."
+  files:
+    - ".agents/AGENTS.md"
+    - ".agents/config/framework.yaml"
+    - ".agents/config/agent-registry.yaml"
+    - ".agents/config/complexity-routing.yaml"
+    - ".agents/config/loading-tiers.yaml"
+    - ".agents/config/memory-policy.yaml"
+    - ".agents/memory/context-db/session-checkpoint.md"
+    - ".agents/agents/orchestrator/prompts/system-prompt.md"
+
+tiers:
+  lite:
+    description: "Bug fixes, config edits, typo fixes, isolated changes."
+    includes: ["core"]
+    files:
+      - ".agents/agents/builder/prompts/system-prompt.md"
+      - ".agents/agents/validator/prompts/system-prompt.md"
+      - ".agents/agents/delivery/prompts/system-prompt.md"
+      - ".agents/protocols/commit-gate-protocol.md"
+
+  standard:
+    description: "Features, CRUD, integrations, and multi-file changes."
+    includes: ["lite"]
+    delta_files:
+      - ".agents/agents/researcher/prompts/system-prompt.md"
+      - ".agents/agents/planner/prompts/system-prompt.md"
+      - ".agents/agents/documentation/prompts/system-prompt.md"
+      - ".agents/protocols/documentation-enforcement-protocol.md"
+      - ".agents/agents/project-manager/prompts/system-prompt.md"
+      - ".agents/protocols/universal-triage-protocol.md"
+      - ".agents/protocols/adaptive-complexity-protocol.md"
+      - ".agents/protocols/versioning-protocol.md"
+      - ".agents/protocols/memory-governance-protocol.md"
+      - ".agents/config/triage-rules.yaml"
+      - ".agents/config/maturity-profiles.yaml"
+      - ".agents/memory/MEMORY-INDEX.md"
+
+  deep:
+    description: "Architecture, migrations, complex features, and high-risk refactors."
+    includes: ["standard"]
+    delta_files:
+      - ".agents/protocols/auto-escalation-protocol.md"
+      - ".agents/protocols/collaboration-protocol.md"
+      - ".agents/protocols/handoff-protocol.md"
+      - ".agents/protocols/self-evaluation-protocol.md"
+      - ".agents/agents/orchestrator/prompts/deep-reasoning.md"
+      - ".agents/agents/researcher/prompts/deep-reasoning.md"
+      - ".agents/agents/planner/prompts/deep-reasoning.md"
+      - ".agents/agents/builder/prompts/deep-reasoning.md"
+      - ".agents/agents/validator/prompts/deep-reasoning.md"
+      - ".agents/agents/documentation/prompts/deep-reasoning.md"
+      - ".agents/agents/project-manager/prompts/deep-reasoning.md"
+      - ".agents/agents/delivery/prompts/deep-reasoning.md"
+      - ".agents/agents/ui-ux-specialist/prompts/deep-reasoning.md"
+      - ".agents/agents/platform-guardian/prompts/deep-reasoning.md"
+      - ".agents/agents/builder/prompts/implementation.md"
+      - ".agents/agents/builder/prompts/refactoring.md"
+      - ".agents/agents/planner/prompts/task-decomposition.md"
+      - ".agents/agents/planner/prompts/strategy-selection.md"
+      - ".agents/agents/validator/prompts/security-audit.md"
+      - ".agents/agents/validator/prompts/quality-gate.md"
+      - ".agents/knowledge/architecture-patterns/decision-tree.md"
+
+  critical:
+    description: "Production, compliance, high-severity security, payment, health, or regulated data."
+    includes: ["deep"]
+    delta_files:
+      - ".agents/protocols/session-closing-protocol.md"
+      - ".agents/protocols/session-handoff-protocol.md"
+      - ".agents/protocols/smart-loading-protocol.md"
+      - ".agents/protocols/evolution-protocol.md"
+      - ".agents/knowledge/security/owasp-top-10/owasp-top-10.md"
+      - ".agents/knowledge/security/api-security/api-security.md"
+      - ".agents/knowledge/security/auth-patterns/auth-patterns.md"
+      - ".agents/knowledge/security/compliance/lgpd-gdpr.md"
+      - ".agents/knowledge/resilience/resilience-patterns.md"
+      - ".agents/knowledge/observability/observability-guide.md"
+      - ".agents/knowledge/operational-intelligence/incident-archetypes.md"
+      - ".agents/knowledge/operational-intelligence/anti-pattern-registry.md"
+      - ".agents/agents/project-manager/governance/governance-framework.md"
+      - ".agents/agents/validator/playbooks/unit-testing-guide.md"
+      - ".agents/agents/validator/playbooks/integration-e2e-testing-guide.md"
+      - ".agents/benchmarks/benchmark-suite.md"
+
+conditional_groups:
+  ui:
+    trigger: "UI, visual, accessibility, layout, design system, or interaction work."
+    files:
+      - ".agents/agents/ui-ux-specialist/prompts/system-prompt.md"
+      - ".agents/agents/ui-ux-specialist/prompts/design-review.md"
+      - ".agents/workflows/ui-workflow.md"
+
+  platform:
+    trigger: "Multi-platform work, build issues, plugin compatibility, or platform-specific bugs."
+    files:
+      - ".agents/agents/platform-guardian/prompts/system-prompt.md"
+      - ".agents/agents/platform-guardian/prompts/compatibility-check.md"
+      - ".agents/agents/platform-guardian/knowledge/known-issues.md"
+
+  flutter:
+    trigger: "Flutter project or active flutter-multiplatform profile."
+    files:
+      - ".agents/profiles/flutter-multiplatform/architecture.md"
+      - ".agents/profiles/flutter-multiplatform/platform-checklist.md"
+      - ".agents/profiles/flutter-multiplatform/packages-compatibility.md"
+      - ".agents/profiles/flutter-multiplatform/testing-strategy.md"
+      - ".agents/profiles/flutter-multiplatform/ui-standards.md"
+
+  docs:
+    trigger: "Documentation, README, API reference, tutorial, or release note work."
+    files:
+      - ".agents/agents/documentation/prompts/auto-documentation.md"
+      - ".agents/agents/documentation/prompts/changelog-generation.md"
+      - ".agents/agents/documentation/prompts/architecture-docs.md"
+      - ".agents/agents/documentation/templates/template-library.md"
+      - ".agents/config/documentation-policy.yaml"
+
+  documentation-runtime:
+    trigger: "Documentation runtime checkpoint, changed file documentation impact, documentation drift, or compact documentation evidence report."
+    files:
+      - ".agents/protocols/documentation-runtime-loop-protocol.md"
+      - ".agents/tools/run-documentation-runtime-loop.ps1"
+      - ".agents/tools/test-documentation-runtime-loop.ps1"
+      - ".agents/config/documentation-policy.yaml"
+      - ".agents/reports/documentation/documentation-runtime-report-template.md"
+      - ".agents/docs/en/17-DOCUMENTATION-RUNTIME-LOOP.md"
+
+  discovery:
+    trigger: "New project, product idea, MVP definition, requirements discovery, or major project direction change."
+    files:
+      - ".agents/protocols/project-discovery-protocol.md"
+      - ".agents/config/project-discovery-policy.yaml"
+      - ".agents/workflows/project-discovery-workflow.md"
+      - ".agents/reports/discovery/project-discovery-template.md"
+      - ".agents/reports/discovery/decision-log-template.md"
+      - ".agents/docs/en/12-PROJECT-DISCOVERY.md"
+
+  adapter:
+    trigger: "Real project, project.yaml, project adapter, local repository commands, protected paths, or controlled project execution."
+    files:
+      - ".agents/protocols/real-project-adapter-protocol.md"
+      - ".agents/workflows/real-project-adapter-workflow.md"
+      - ".agents/config/project.yaml"
+      - ".agents/reports/adapters/real-project-adapter-status-template.md"
+      - ".agents/docs/en/13-REAL-PROJECT-ADAPTER.md"
+
+  real-execution:
+    trigger: "Real project execution, DryRun plan, Apply approval, backup before mutation, or adapter-bound implementation."
+    files:
+      - ".agents/protocols/developer-real-project-execution-protocol.md"
+      - ".agents/workflows/real-project-execution-workflow.md"
+      - ".agents/tools/run-real-project-execution.ps1"
+      - ".agents/reports/executions/real-project-execution-plan-template.md"
+      - ".agents/docs/en/14-REAL-PROJECT-EXECUTION.md"
+      - ".agents/config/project.yaml"
+
+  real-hardening:
+    trigger: "Real project execution hardening, controlled Apply fixture, backup artifact, audit trail, protected-path override, or restore validation."
+    files:
+      - ".agents/protocols/real-project-execution-hardening-protocol.md"
+      - ".agents/tools/run-real-project-execution.ps1"
+      - ".agents/tools/test-real-project-execution.ps1"
+      - ".agents/tools/check-real-project-hardening.ps1"
+      - ".agents/reports/executions/real-project-hardening-template.md"
+
+  quality-gates:
+    trigger: "Adapter command allowlist, project test/lint/build execution, destructive command denial, or quality gate reports."
+    files:
+      - ".agents/protocols/command-allowlist-quality-gate-protocol.md"
+      - ".agents/tools/run-quality-gates.ps1"
+      - ".agents/tools/test-quality-gate-runner.ps1"
+      - ".agents/reports/executions/command-quality-gate-report-template.md"
+      - ".agents/config/project.yaml"
+      - ".agents/docs/en/15-COMMAND-QUALITY-GATES.md"
+
+  real-apply-scenario:
+    trigger: "End-to-end real-project Apply scenario, DryRun-to-Apply fixture, before/after quality gates, backup evidence, or restore validation."
+    files:
+      - ".agents/protocols/real-project-apply-scenario-protocol.md"
+      - ".agents/tools/test-real-project-apply-scenario.ps1"
+      - ".agents/tools/check-real-project-apply-scenario.ps1"
+      - ".agents/reports/executions/real-project-apply-scenario-template.md"
+      - ".agents/docs/en/16-REAL-PROJECT-APPLY-SCENARIO.md"
+      - ".agents/protocols/developer-real-project-execution-protocol.md"
+      - ".agents/protocols/command-allowlist-quality-gate-protocol.md"
+
+  release:
+    trigger: "Commit, version bump, changelog, tag, package, or release work."
+    files:
+      - ".agents/agents/delivery/prompts/commit-generation.md"
+      - ".agents/agents/delivery/prompts/release-checklist.md"
+      - ".agents/protocols/versioning-protocol.md"
+
+  release-evidence:
+    trigger: "Release evidence, package proof, consolidated gate summaries, or release audit bundle."
+    files:
+      - ".agents/protocols/release-evidence-bundle-protocol.md"
+      - ".agents/tools/run-release-evidence-bundle.ps1"
+      - ".agents/tools/check-release-evidence-bundle.ps1"
+      - ".agents/tools/test-release-evidence-bundle.ps1"
+      - ".agents/reports/releases/release-evidence-template.md"
+      - ".agents/docs/en/18-RELEASE-EVIDENCE-BUNDLE.md"
+
+  operational-review:
+    trigger: "Final score review, residual risk review, token economy review, or v7.x operational polish."
+    files:
+      - ".agents/protocols/operational-polish-score-review-protocol.md"
+      - ".agents/tools/run-operational-score-review.ps1"
+      - ".agents/tools/check-operational-score-review.ps1"
+      - ".agents/reports/operational/score-review-template.md"
+      - ".agents/docs/en/19-OPERATIONAL-SCORE-REVIEW.md"
+
+  install-update-wizard:
+    trigger: "Installing HEPHAESTUS, updating HEPHAESTUS, comparing framework versions, setup wizard, or operator-guided package setup."
+    files:
+      - ".agents/protocols/install-update-wizard-protocol.md"
+      - ".agents/kernel/INSTALL-UPDATE.md"
+      - ".agents/tools/compare-framework-version.ps1"
+      - ".agents/tools/install-framework.ps1"
+      - ".agents/tools/update-framework.ps1"
+      - ".agents/docs/en/20-INSTALL-UPDATE-WIZARD.md"
+
+  memory-proof:
+    trigger: "Memory proof, telemetry proof, memory consultation audit, telemetry retention, or optional memory evidence."
+    files:
+      - ".agents/protocols/optional-telemetry-memory-proof-protocol.md"
+      - ".agents/protocols/memory-consultation-protocol.md"
+      - ".agents/config/memory-policy.yaml"
+      - ".agents/config/telemetry-schema.yaml"
+      - ".agents/tools/run-memory-proof.ps1"
+      - ".agents/tools/check-memory-proof.ps1"
+      - ".agents/reports/memory/memory-proof-template.md"
+      - ".agents/docs/en/21-OPTIONAL-TELEMETRY-MEMORY-PROOF.md"
+
+  operator-experience:
+    trigger: "Operator experience, which guide to open, first-use path, stale prompt review, documentation navigation, or final operator review."
+    files:
+      - ".agents/protocols/final-operator-experience-review-protocol.md"
+      - ".agents/tools/run-operator-experience-review.ps1"
+      - ".agents/tools/check-operator-experience.ps1"
+      - ".agents/docs/en/22-OPERATOR-EXPERIENCE-MAP.md"
+      - ".agents/docs/en/prompts/READY-PROMPTS.md"
+      - ".agents/reports/operator/operator-experience-template.md"
+
+  communication-bus:
+    trigger: "Inter-agent communication, handoff audit, consultation, conflict, correction loop, alert, decision log, or communication bus proof."
+    files:
+      - ".agents/config/communication-bus.yaml"
+      - ".agents/protocols/inter-agent-communication-bus-protocol.md"
+      - ".agents/protocols/collaboration-protocol.md"
+      - ".agents/protocols/handoff-protocol.md"
+      - ".agents/tools/run-communication-bus-proof.ps1"
+      - ".agents/tools/check-communication-bus.ps1"
+      - ".agents/reports/communication/communication-bus-template.md"
+      - ".agents/docs/en/23-INTER-AGENT-COMMUNICATION-BUS.md"
+
+  operator-cli:
+    trigger: "Unified CLI, hephaestus command, doctor, validate, gate, package, evidence, install command, or update command."
+    files:
+      - ".agents/protocols/unified-operator-cli-protocol.md"
+      - ".agents/tools/hephaestus.ps1"
+      - ".agents/tools/check-unified-cli.ps1"
+      - ".agents/docs/en/24-UNIFIED-OPERATOR-CLI.md"
+      - ".agents/docs/en/20-INSTALL-UPDATE-WIZARD.md"
+      - ".agents/releases/PACKAGE-CHECKLIST.md"
+
+  core-contract:
+    trigger: "Core contract drift, AGENTS.md cleanup, version alignment, Smart Loading core token economy, or stale framework entry point review."
+    files:
+      - ".agents/protocols/core-contract-drift-guard-protocol.md"
+      - ".agents/tools/check-core-contract.ps1"
+      - ".agents/docs/en/25-CORE-CONTRACT-DRIFT-GUARD.md"
+      - ".agents/AGENTS.md"
+      - ".agents/config/framework.yaml"
+      - ".agents/config/framework-manifest.yaml"
+
+  operator-daily:
+    trigger: "Daily start, validate before closing, release preparation, first install, Windows installer launcher, or first-call prompt generation."
+    files:
+      - ".agents/protocols/operator-daily-launcher-protocol.md"
+      - ".agents/tools/operator-daily.ps1"
+      - ".agents/tools/install-hephaestus-launcher.ps1"
+      - ".agents/tools/install-hephaestus.bat"
+      - ".agents/tools/check-operator-daily-launcher.ps1"
+      - ".agents/docs/en/26-OPERATOR-DAILY-LAUNCHER.md"
+      - ".agents/docs/en/24-UNIFIED-OPERATOR-CLI.md"
+
+  project-bootstrap:
+    trigger: "Project bootstrap, first project readiness pass, adapter draft, post-install setup, discovery-to-adapter bridge, or initial project configuration."
+    files:
+      - ".agents/protocols/project-bootstrap-assistant-protocol.md"
+      - ".agents/protocols/project-discovery-protocol.md"
+      - ".agents/protocols/real-project-adapter-protocol.md"
+      - ".agents/tools/run-project-bootstrap.ps1"
+      - ".agents/tools/check-project-bootstrap.ps1"
+      - ".agents/reports/adapters/project-bootstrap-template.md"
+      - ".agents/docs/en/27-PROJECT-BOOTSTRAP-ASSISTANT.md"
+      - ".agents/docs/en/12-PROJECT-DISCOVERY.md"
+      - ".agents/docs/en/13-REAL-PROJECT-ADAPTER.md"
+
+  stability-baseline:
+    trigger: "Stability baseline, regression sentinel, release regression check, stable surface audit, or critical capability wiring review."
+    files:
+      - ".agents/config/stability-baseline.yaml"
+      - ".agents/protocols/stability-baseline-regression-sentinel-protocol.md"
+      - ".agents/tools/run-stability-baseline.ps1"
+      - ".agents/tools/check-stability-baseline.ps1"
+      - ".agents/reports/operational/stability-baseline-template.md"
+      - ".agents/docs/en/28-STABILITY-BASELINE.md"
+      - ".agents/config/framework-manifest.yaml"
+
+  operator-runbook:
+    trigger: "Operator runbook, recovery after failed validation, failed gate, package gate, install or update recovery, or daily command guidance."
+    files:
+      - ".agents/protocols/operator-runbook-recovery-protocol.md"
+      - ".agents/tools/check-operator-runbook.ps1"
+      - ".agents/docs/en/29-OPERATOR-RUNBOOK-RECOVERY.md"
+      - ".agents/docs/en/24-UNIFIED-OPERATOR-CLI.md"
+      - ".agents/docs/en/20-INSTALL-UPDATE-WIZARD.md"
+      - ".agents/releases/PACKAGE-CHECKLIST.md"
+
+  guided-installer:
+    trigger: "Guided install, repository mode, GitHub/local repository onboarding, first-call handoff, or START-HEPHAESTUS launcher."
+    files:
+      - ".agents/protocols/guided-installer-repository-onboarding-protocol.md"
+      - ".agents/tools/install-hephaestus-launcher.ps1"
+      - ".agents/tools/install-hephaestus.bat"
+      - ".agents/tools/check-guided-installer.ps1"
+      - ".agents/docs/en/30-GUIDED-INSTALLER-REPOSITORY-ONBOARDING.md"
+      - ".agents/docs/en/29-OPERATOR-RUNBOOK-RECOVERY.md"
+      - ".agents/docs/en/20-INSTALL-UPDATE-WIZARD.md"
+
+  first-project-walkthrough:
+    trigger: "First project, how to start, new project walkthrough, existing project onboarding, first real use, or operator uncertainty after install."
+    files:
+      - ".agents/protocols/practical-first-project-walkthrough-protocol.md"
+      - ".agents/tools/check-first-project-walkthrough.ps1"
+      - ".agents/docs/en/31-PRACTICAL-FIRST-PROJECT-WALKTHROUGH.md"
+      - ".agents/docs/en/30-GUIDED-INSTALLER-REPOSITORY-ONBOARDING.md"
+      - ".agents/docs/en/27-PROJECT-BOOTSTRAP-ASSISTANT.md"
+      - ".agents/docs/en/12-PROJECT-DISCOVERY.md"
+      - ".agents/docs/en/13-REAL-PROJECT-ADAPTER.md"
+
+  database:
+    trigger: "Database schema, migration, persistence, query, cache, or data modeling work."
+    files:
+      - ".agents/knowledge/database-playbook/database-playbook.md"
+
+  api:
+    trigger: "API design, REST, integration, service boundary, or external contract work."
+    files:
+      - ".agents/agents/builder/patterns/api-design/rest-best-practices.md"
+      - ".agents/knowledge/security/api-security/api-security.md"
+
+  resilience:
+    trigger: "Reliability, retry, timeout, circuit breaker, outage, or incident work."
+    files:
+      - ".agents/agents/builder/patterns/error-handling/retry-circuit-breaker.md"
+      - ".agents/agents/builder/patterns/error-handling/global-error-handler.md"
+      - ".agents/knowledge/resilience/resilience-patterns.md"
+
+rules:
+  - "Always load core first."
+  - "Escalation loads only delta files for the higher tier."
+  - "Conditional groups are loaded only when the trigger is relevant."
+  - "Do not load broad technology catalogs by default."
+  - "Use the estimator before expanding tier definitions."

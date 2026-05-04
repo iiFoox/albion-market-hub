@@ -1,0 +1,20 @@
+id: "production-migration"
+request: "Plan and execute a production database migration with rollback for customer data."
+expected:
+  min_level: "CRITICAL"
+  workflow: "full-pipeline"
+  required_agents:
+    - "orchestrator"
+    - "researcher"
+    - "planner"
+    - "builder"
+    - "validator"
+    - "documentation"
+    - "project-manager"
+    - "delivery"
+  optional_agents: []
+  forbidden_agents: []
+  triggers:
+    - "production"
+    - "database migration"
+    - "rollback"

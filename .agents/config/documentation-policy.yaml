@@ -1,0 +1,42 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Documentation Policy
+# =============================================================================
+# Active documentation policy for v8.0.0+. This file defines lightweight,
+# enforceable documentation checkpoints without requiring broad doc loading.
+# =============================================================================
+
+documentation_policy:
+  version: "8.0.0"
+  protocol: ".agents/protocols/documentation-enforcement-protocol.md"
+  impact_template: ".agents/reports/documentation/documentation-impact-template.md"
+
+enforcement:
+  documentation_agent_always_active: true
+  pipeline_mandatory_checkpoint: true
+  allow_not_impacted_status: true
+  require_reason_when_not_impacted: true
+
+triggered_updates:
+  code_change: true
+  docs_change: true
+  config_change: true
+  architecture_change: true
+  release_change: true
+  benchmark_or_simulation_report: true
+
+token_policy:
+  lite: "impact status only"
+  standard: "changed docs and changelog notes"
+  deep: "ADR, architecture docs, diagrams, migration notes"
+  critical: "compliance, operations, rollback, audit docs"
+
+
+
+
+
+
+
+
+
+
+

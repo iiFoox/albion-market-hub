@@ -1,0 +1,120 @@
+# Complexity Routing — Pipeline Intensity Configuration
+
+# Used by Adaptive Complexity Protocol.
+# Defines how many agents, depth, and features are active per level.
+
+levels:
+
+  LITE:
+    description: "Quick fixes, typos, simple config changes"
+    min_agents: 2
+    max_agents: 3
+    mandatory_agents: ["orchestrator", "builder"]
+    optional_agents: ["delivery"]
+    deep_reasoning: false
+    memory_query: "last_entry_only"
+    triage_mode: "orchestrator_decides"
+    adversarial_review: false
+    industry_profile: false
+    delivery_mode: "auto_commit_patch"
+    estimated_time: "< 30 min"
+    keywords:
+      - fix
+      - typo
+      - rename
+      - style
+      - format
+      - comment
+      - config
+      - env
+      - update
+
+  STANDARD:
+    description: "Normal features, CRUD, integrations"
+    min_agents: 4
+    max_agents: 6
+    mandatory_agents: ["orchestrator", "builder", "validator", "project-manager"]
+    optional_agents: ["researcher", "planner", "documentation", "delivery"]
+    deep_reasoning: true
+    deep_reasoning_agents: ["builder", "validator"]
+    memory_query: "full_search"
+    triage_mode: "all_agents_vote"
+    adversarial_review: false
+    industry_profile: false
+    delivery_mode: "commit_with_changelog"
+    estimated_time: "1-8 hours"
+    keywords:
+      - add
+      - create
+      - implement
+      - feature
+      - integrate
+      - refactor
+      - optimize
+      - crud
+
+  DEEP:
+    description: "Architecture, security, migrations, complex features"
+    min_agents: 6
+    max_agents: 8
+    mandatory_agents: ["orchestrator", "researcher", "planner", "builder", "validator", "documentation"]
+    optional_agents: ["delivery", "project-manager"]
+    deep_reasoning: true
+    deep_reasoning_agents: "all"
+    memory_query: "full_search_plus_cross_project"
+    triage_mode: "all_agents_vote_with_justification"
+    adversarial_review: true
+    adversarial_agents: ["validator"]
+    industry_profile: "if_applicable"
+    delivery_mode: "commit_changelog_version_minor"
+    estimated_time: "1-5 days"
+    keywords:
+      - migrate
+      - architecture
+      - redesign
+      - scale
+      - performance
+      - auth
+      - real-time
+      - multi-tenant
+      - websocket
+
+  CRITICAL:
+    description: "Production, financial, compliance, high-risk changes"
+    min_agents: 8
+    max_agents: 8
+    mandatory_agents: "all"
+    deep_reasoning: true
+    deep_reasoning_agents: "all"
+    memory_query: "full_search_plus_cross_project_plus_incidents"
+    triage_mode: "all_agents_mandatory_with_justification"
+    adversarial_review: true
+    adversarial_agents: ["builder", "validator"]
+    industry_profile: true
+    delivery_mode: "commit_changelog_version_tag_release"
+    estimated_time: "1-2 weeks"
+    keywords:
+      - payment
+      - financial
+      - health
+      - compliance
+      - production
+      - database migration
+      - security
+      - encryption
+      - pci
+      - hipaa
+      - lgpd
+      - rollback
+      - disaster
+
+# Override rules
+overrides:
+  escalation:
+    - "IF any_agent_triage = CRITICAL THEN min_level = DEEP"
+    - "IF industry_profile_active THEN min_level = STANDARD"
+    - "IF production_environment THEN min_level = STANDARD"
+  
+  de_escalation:
+    - "User can manually set level with: 'use LITE pipeline'"
+    - "PM can recommend based on previous similar tasks"

@@ -1,0 +1,120 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Telemetry Event Schema
+# =============================================================================
+# Lightweight schema for validating markdown telemetry logs.
+# =============================================================================
+
+schema:
+  version: "8.0.0"
+  telemetry_spec: ".agents/telemetry/TELEMETRY.md"
+  validator: ".agents/tools/validate-telemetry.ps1"
+
+required_frontmatter:
+  - "log_type"
+  - "timestamp"
+  - "status"
+
+optional_frontmatter:
+  - "event"
+  - "pipeline_id"
+  - "agent_id"
+  - "request_id"
+  - "duration_ms"
+  - "framework_version"
+  - "complexity"
+  - "workflow"
+
+allowed_log_types:
+  - "pipeline"
+  - "agent-activity"
+  - "communication"
+  - "memory-operation"
+  - "evolution"
+  - "summary"
+  - "health"
+  - "loading"
+  - "simulation"
+  - "developer-execution"
+  - "developer-benchmark"
+  - "memory-proof"
+  - "operator-experience"
+  - "communication-bus"
+
+allowed_statuses:
+  - "success"
+  - "partial_success"
+  - "partial"
+  - "failure"
+  - "aborted"
+  - "warning"
+  - "info"
+
+canonical_events:
+  pipeline:
+    - "pipeline.started"
+    - "pipeline.completed"
+    - "pipeline.failed"
+    - "pipeline.aborted"
+  agent:
+    - "agent.activated"
+    - "agent.completed"
+    - "agent.failed"
+    - "agent.skipped"
+  escalation:
+    - "escalation.triggered"
+    - "escalation.completed"
+    - "escalation.rejected"
+  validation:
+    - "validation.started"
+    - "validation.completed"
+    - "validation.failed"
+  memory:
+    - "memory.consulted"
+    - "memory.query"
+    - "memory.hit"
+    - "memory.miss"
+    - "memory.written"
+    - "memory.updated"
+    - "memory.proof_generated"
+  release:
+    - "release.created"
+    - "release.packaged"
+    - "release.validated"
+  health:
+    - "health.checked"
+    - "health.warning"
+    - "health.failed"
+  simulation:
+    - "simulation.started"
+    - "simulation.completed"
+    - "simulation.failed"
+  developer_execution:
+    - "developer_execution.started"
+    - "developer_execution.completed"
+    - "developer_execution.failed"
+  developer_benchmark:
+    - "developer_benchmark.started"
+    - "developer_benchmark.completed"
+    - "developer_benchmark.failed"
+  communication_bus:
+    - "communication.message_created"
+    - "communication.handoff"
+    - "communication.consultation"
+    - "communication.conflict"
+    - "communication.decision"
+    - "communication.correction"
+
+legacy_policy:
+  markdown_without_frontmatter: "warn"
+  missing_optional_fields: "ignore"
+
+
+
+
+
+
+
+
+
+
+

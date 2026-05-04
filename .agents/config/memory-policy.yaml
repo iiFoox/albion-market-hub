@@ -1,0 +1,80 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Memory Policy
+# =============================================================================
+# Active memory policy for v5.4.0+. This file defines tier-aware memory usage
+# without forcing broad memory loading on every request.
+# =============================================================================
+
+memory_policy:
+  version: "8.0.0"
+  protocol: ".agents/protocols/memory-consultation-protocol.md"
+  governance: ".agents/protocols/memory-governance-protocol.md"
+
+consultation:
+  default: "triggered"
+  always_on_session_start: true
+  always_on_session_close: true
+  search_index_first: true
+  load_full_store_by_default: false
+
+tier_budgets:
+  lite:
+    max_files: 2
+    required:
+      - ".agents/memory/context-db/session-checkpoint.md"
+    optional:
+      - ".agents/memory/MEMORY-INDEX.md"
+  standard:
+    max_files: 5
+    required:
+      - ".agents/memory/context-db/session-checkpoint.md"
+      - ".agents/memory/context-db/session-brief.md"
+      - ".agents/memory/MEMORY-INDEX.md"
+  deep:
+    max_files: 10
+    required:
+      - ".agents/memory/context-db/session-checkpoint.md"
+      - ".agents/memory/context-db/session-brief.md"
+      - ".agents/memory/MEMORY-INDEX.md"
+  critical:
+    max_files: "as-needed"
+    required:
+      - ".agents/memory/context-db/session-checkpoint.md"
+      - ".agents/memory/context-db/session-brief.md"
+      - ".agents/memory/MEMORY-INDEX.md"
+
+write_back:
+  update_checkpoint_on_session_close: true
+  update_brief_on_session_close: true
+  require_index_update_for_new_entries: true
+  prefer_quick_learning: true
+  avoid_duplicate_entries: true
+
+proof:
+  enabled: true
+  mode: "optional_compact_evidence"
+  protocol: ".agents/protocols/optional-telemetry-memory-proof-protocol.md"
+  run_tool: ".agents/tools/run-memory-proof.ps1"
+  latest_report: ".agents/reports/memory/memory-proof-latest.md"
+  emit_normal_session_telemetry: false
+  prove_index_first: true
+  prove_full_store_not_default: true
+  retention_check: "dry_run_first"
+
+entry_templates:
+  decision: ".agents/memory/templates/decision.md"
+  learning: ".agents/memory/templates/learning.md"
+  risk: ".agents/memory/templates/risk.md"
+  project_state: ".agents/memory/templates/project-state.md"
+  next_action: ".agents/memory/templates/next-action.md"
+
+
+
+
+
+
+
+
+
+
+

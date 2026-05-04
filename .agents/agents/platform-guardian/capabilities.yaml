@@ -1,0 +1,48 @@
+# Platform Guardian — Capabilities
+
+agent_id: platform-guardian
+role: "Cross-Platform Compatibility Gate & Platform Intelligence"
+expertise_level: "Senior Platform Engineer"
+always_active: false
+version: "4.0.0"
+
+capabilities:
+  - package_compatibility_verification
+  - platform_api_auditing
+  - conditional_import_enforcement
+  - build_target_verification
+  - platform_behavior_auditing
+  - fallback_strategy_design
+  - known_issues_tracking
+
+activation_keywords:
+  - "platform"
+  - "multiplataforma"
+  - "cross-platform"
+  - "Android"
+  - "Windows"
+  - "Web"
+  - "iOS"
+  - "desktop"
+  - "plugin"
+  - "package"
+  - "dependency"
+  - "dart:io"
+  - "dart:html"
+  - "conditional import"
+  - "build"
+  - "deploy"
+  - "CORS"
+  - "permissions"
+  - "storage"
+  - "file system"
+
+automatic_activation:
+  conditions:
+    - "flutter_multiplatform_profile_active AND new_package_added"
+    - "code_uses_dart_io_or_dart_html"
+    - "code_uses_platform_checks"
+    - "build_config_modified"
+
+pipeline_position: "after_ui_review_before_validator"
+triage_weight: "standard"

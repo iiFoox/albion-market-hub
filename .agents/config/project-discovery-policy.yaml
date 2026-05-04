@@ -1,0 +1,84 @@
+# =============================================================================
+# HEPHAESTUS Project Discovery Policy
+# =============================================================================
+# Active policy for v8.0.0+. This file defines how the framework matures
+# project ideas before implementation while preserving token economy.
+# =============================================================================
+
+policy:
+  version: "8.0.0"
+  enabled: true
+  mode: "conditional"
+  protocol: ".agents/protocols/project-discovery-protocol.md"
+  workflow: ".agents/workflows/project-discovery-workflow.md"
+  report_template: ".agents/reports/discovery/project-discovery-template.md"
+  decision_log_template: ".agents/reports/discovery/decision-log-template.md"
+
+activation:
+  triggers:
+    - "new project"
+    - "new product"
+    - "startup idea"
+    - "MVP"
+    - "requirements discovery"
+    - "business rules"
+    - "product story"
+    - "project start"
+    - "major direction change"
+    - "zero-cost launch"
+    - "multi-operator workspace"
+  default_complexity: "DEEP"
+  allow_standard_when_scope_is_small: true
+
+required_domains:
+  - product_story
+  - problem
+  - users
+  - journeys
+  - business_rules
+  - backend
+  - data
+  - integrations
+  - cost_model
+  - legal_ip
+  - market_context
+  - mvp
+  - team_workflow
+  - git_strategy
+  - risks
+  - implementation_readiness
+
+questioning:
+  one_question_at_a_time_when_unclear: true
+  challenge_shallow_answers: true
+  require_pros_cons_for_direction_changes: true
+  separate_facts_assumptions_decisions: true
+  operator_confirmation_before_planning: true
+
+cost_control:
+  prioritize_zero_cost_start_when_requested: true
+  identify_free_tier_limits: true
+  flag_future_cost_surprises: true
+  document_vendor_lock_in: true
+
+documentation:
+  living_documentation_required: true
+  update_on_direction_change: true
+  require_decision_log: true
+  output_directory: ".agents/reports/discovery"
+
+token_policy:
+  default_loaded: false
+  conditional_group: "discovery"
+  summarize_previous_answers: true
+  avoid_full_report_reload_when_summary_exists: true
+
+
+
+
+
+
+
+
+
+

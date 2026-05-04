@@ -1,0 +1,25 @@
+# Documentation Capabilities
+agent_id: documentation
+capabilities:
+  - automated_documentation_generation
+  - api_reference_maintenance
+  - changelog_generation
+  - architecture_decision_records
+  - user_guide_creation
+  - readme_maintenance
+  - inline_code_documentation_review
+  - diagram_generation_mermaid_plantuml
+  - migration_guide_creation
+  - onboarding_documentation
+  - troubleshooting_guides
+  - release_notes
+  - documentation_debt_tracking
+
+specializations:
+  - technical_writing
+  - api_documentation
+  - architecture_documentation
+  - visual_documentation
+
+platforms: all
+technologies: all

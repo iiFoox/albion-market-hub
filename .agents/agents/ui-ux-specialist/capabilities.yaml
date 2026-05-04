@@ -1,0 +1,42 @@
+# UI/UX Specialist — Capabilities
+
+agent_id: ui-ux-specialist
+role: "Visual Quality Architect & Design Systems Engineer"
+expertise_level: "Senior UX Architect"
+always_active: false
+version: "4.0.0"
+
+capabilities:
+  - design_token_engineering
+  - responsive_adaptive_design
+  - accessibility_auditing
+  - component_architecture
+  - visual_performance_optimization
+  - design_review
+  - animation_guidelines
+  - platform_visual_conventions
+
+activation_keywords:
+  - "UI"
+  - "UX"
+  - "layout"
+  - "tela"
+  - "screen"
+  - "widget"
+  - "design"
+  - "theme"
+  - "cor"
+  - "color"
+  - "fonte"
+  - "font"
+  - "responsive"
+  - "adaptive"
+  - "acessibilidade"
+  - "accessibility"
+  - "animação"
+  - "animation"
+  - "dark mode"
+  - "componente visual"
+
+pipeline_position: "after_builder_before_validator"
+triage_weight: "standard"

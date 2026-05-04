@@ -1,0 +1,19 @@
+id: "flutter-platform"
+request: "Fix Flutter Web file upload because the current plugin works on Android but fails on Web."
+expected:
+  min_level: "STANDARD"
+  workflow: "full-pipeline"
+  required_agents:
+    - "orchestrator"
+    - "researcher"
+    - "builder"
+    - "platform-guardian"
+    - "validator"
+  optional_agents:
+    - "planner"
+    - "documentation"
+  forbidden_agents: []
+  triggers:
+    - "flutter"
+    - "web"
+    - "plugin"

@@ -1,0 +1,147 @@
+# Maturity Profiles — Project Context Adaptation
+
+# How to use:
+# The Orchestrator detects or asks for the maturity profile at project start.
+# All agents adapt their depth, rigor, and recommendations based on the active profile.
+# User can override at any time: "use enterprise profile for this project"
+
+profiles:
+
+  startup:
+    description: "Early-stage, speed > perfection, MVP focus"
+    default_complexity: LITE
+    quality_gates:
+      min_test_coverage: 60
+      required_reviews: 0
+      documentation: "README only"
+      adr_required: false
+      security_audit: "basic (OWASP top 3)"
+    delivery:
+      commit_style: "frequent, small"
+      versioning: "0.x.y (pre-stable)"
+      changelog: optional
+    agent_behavior:
+      researcher: "quick evaluation, 2 alternatives max"
+      planner: "lightweight plan, MVP scope only"
+      builder: "functional first, refactor later"
+      validator: "smoke tests + critical path only"
+      documentation: "README + inline comments"
+    risk_tolerance: HIGH
+    tech_debt_tolerance: HIGH
+    when_to_use:
+      - "Proof of concept"
+      - "Hackathon or prototype"
+      - "Solo developer or tiny team"
+      - "< 3 months expected lifetime"
+
+  pme:
+    description: "Small/medium business, balanced quality and speed"
+    default_complexity: STANDARD
+    quality_gates:
+      min_test_coverage: 75
+      required_reviews: 1
+      documentation: "README + API docs"
+      adr_required: "for architectural decisions only"
+      security_audit: "standard (OWASP top 10)"
+    delivery:
+      commit_style: "conventional commits"
+      versioning: "semver stable (1.x.y+)"
+      changelog: required
+    agent_behavior:
+      researcher: "standard evaluation, 3 alternatives"
+      planner: "full plan with phases and acceptance criteria"
+      builder: "production-quality code"
+      validator: "unit + integration tests"
+      documentation: "README + API docs + ADR for key decisions"
+    risk_tolerance: MEDIUM
+    tech_debt_tolerance: MEDIUM
+    when_to_use:
+      - "Product with paying customers"
+      - "Team of 2-10 developers"
+      - "1-3 year expected lifetime"
+      - "Standard business application"
+
+  enterprise:
+    description: "Large org, high quality, compliance awareness"
+    default_complexity: DEEP
+    quality_gates:
+      min_test_coverage: 90
+      required_reviews: 2
+      documentation: "full (README, API, ADR, runbook, changelog)"
+      adr_required: true
+      security_audit: "comprehensive (OWASP + dependency scan + penetration)"
+    delivery:
+      commit_style: "conventional commits + signed"
+      versioning: "semver strict with release candidates"
+      changelog: required_with_categories
+    agent_behavior:
+      researcher: "deep evaluation, 4+ alternatives, risk matrix"
+      planner: "comprehensive plan, phases, dependencies, rollback plan"
+      builder: "enterprise-grade, patterns from knowledge base"
+      validator: "unit + integration + e2e + security + performance"
+      documentation: "full documentation suite"
+    risk_tolerance: LOW
+    tech_debt_tolerance: LOW
+    when_to_use:
+      - "Large team (10+ developers)"
+      - "B2B SaaS with enterprise clients"
+      - "3+ year expected lifetime"
+      - "High availability requirements"
+
+  regulated:
+    description: "Finance, health, government — compliance mandatory"
+    default_complexity: CRITICAL
+    quality_gates:
+      min_test_coverage: 95
+      required_reviews: 2
+      documentation: "full + compliance documentation"
+      adr_required: true
+      security_audit: "comprehensive + industry-specific (PCI/HIPAA/LGPD)"
+      audit_trail: mandatory
+    delivery:
+      commit_style: "conventional commits + signed + traceable"
+      versioning: "semver strict with RC + audit tags"
+      changelog: required_with_compliance_notes
+    agent_behavior:
+      researcher: "maximum depth, compliance check included"
+      planner: "comprehensive + compliance requirements + rollback + DR plan"
+      builder: "enterprise-grade + encryption + audit logging + compliance patterns"
+      validator: "full suite + security pentest + compliance validation"
+      documentation: "full + compliance docs + data flow diagrams"
+    industry_profiles:
+      - fintech
+      - healthcare
+    risk_tolerance: VERY_LOW
+    tech_debt_tolerance: ZERO
+    when_to_use:
+      - "Financial services (PCI-DSS)"
+      - "Healthcare (HIPAA)"
+      - "Government systems"
+      - "Any system handling regulated data"
+
+  legacy:
+    description: "Existing system, careful changes, high regression risk"
+    default_complexity: STANDARD
+    quality_gates:
+      min_test_coverage: 70
+      required_reviews: 1
+      documentation: "ADR for every change + impact analysis"
+      adr_required: true
+      security_audit: "standard + dependency vulnerability check"
+    delivery:
+      commit_style: "conventional commits with detailed body"
+      versioning: "continue existing versioning scheme"
+      changelog: required
+    agent_behavior:
+      researcher: "focus on backward compatibility and migration risk"
+      planner: "strangler fig approach, incremental changes only"
+      builder: "minimal changes, maximum compatibility, feature flags"
+      validator: "regression testing priority, snapshot tests"
+      documentation: "change impact docs + migration guides"
+    risk_tolerance: LOW
+    tech_debt_tolerance: "accept existing, don't add new"
+    when_to_use:
+      - "Brownfield project"
+      - "System with limited test coverage"
+      - "Dependencies on legacy systems"
+      - "High cost of failure"

@@ -1,0 +1,448 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Global Configuration
+# =============================================================================
+# This file defines ONLY active, enforced settings that change AI behavior.
+# Technology catalogs were removed — the AI already knows these natively.
+# Aspirational features are tracked in ROADMAP.md, not here.
+# =============================================================================
+
+framework:
+  name: "HEPHAESTUS Agent Framework"
+  version: "8.7.0"
+  created: "2026-04-05"
+  last_updated: "2026-04-28"
+  description: >
+    A production-grade, self-evolving multi-agent system designed for
+    expert-level software engineering across all platforms, technologies,
+    and paradigms.
+
+# -----------------------------------------------------------------------------
+# Active Profiles
+# -----------------------------------------------------------------------------
+active_profiles:
+  - id: "flutter-multiplatform"
+    path: ".agents/profiles/flutter-multiplatform/"
+    active: true
+    target_platforms: [Android, Windows, Web, iOS]
+    description: >
+      Flutter multi-platform profile with architecture, UI standards,
+      platform checklist, package compatibility matrix, and testing strategy.
+    auto_activate_agents:
+      - "ui-ux-specialist"
+      - "platform-guardian"
+
+# -----------------------------------------------------------------------------
+# Language Policy
+# -----------------------------------------------------------------------------
+language:
+  definitions: "en"        # All technical artifacts in English
+  communication: "pt-BR"   # All user interaction in Brazilian Portuguese
+  code_comments: "en"      # Code comments in English
+  documentation: "en"      # Documentation in English
+  memory_entries: "en"     # Memory entries in English
+
+# -----------------------------------------------------------------------------
+# Core Principles
+# -----------------------------------------------------------------------------
+principles:
+  expertise_level: "master"
+  description: >
+    Every agent operates at master-level with 30+ years equivalent
+    cross-domain expertise. No shallow responses. No generic guidance.
+    Expert-level knowledge across all domains must be paired with evidence,
+    trade-off analysis, risk anticipation, and humility about uncertainty.
+  rules:
+    - "Evolutionary learning through memory system"
+    - "Mandatory self-evaluation for every request"
+    - "Security-first mindset"
+    - "Performance-aware design"
+    - "Maintainability over cleverness"
+    - "Question shallow requirements before execution"
+    - "Document decisions and documentation impact"
+
+# -----------------------------------------------------------------------------
+# Execution Settings (only enforced behaviors)
+# -----------------------------------------------------------------------------
+execution:
+  self_evaluation:
+    required: true
+    all_agents: true
+
+  telemetry:
+    enabled: true
+    log_directory: ".agents/telemetry/logs"
+    schema: ".agents/config/telemetry-schema.yaml"
+    health_report: ".agents/reports/health/latest.md"
+    cleanup_tool: ".agents/tools/cleanup-telemetry.ps1"
+    cleanup_mode: "manual"
+
+  documentation_enforcement:
+    enabled: true
+    agent: "documentation"
+    policy: ".agents/config/documentation-policy.yaml"
+    protocol: ".agents/protocols/documentation-enforcement-protocol.md"
+    impact_template: ".agents/reports/documentation/documentation-impact-template.md"
+    mode: "lightweight_checkpoint"
+    allow_not_impacted_status: true
+    require_reason_when_not_impacted: true
+
+  documentation_runtime_loop:
+    enabled: true
+    mode: "changed_paths_to_compact_impact_report"
+    protocol: ".agents/protocols/documentation-runtime-loop-protocol.md"
+    run_tool: ".agents/tools/run-documentation-runtime-loop.ps1"
+    test_tool: ".agents/tools/test-documentation-runtime-loop.ps1"
+    check_tool: ".agents/tools/check-documentation-runtime-loop.ps1"
+    report_template: ".agents/reports/documentation/documentation-runtime-report-template.md"
+    latest_report: ".agents/reports/documentation/documentation-runtime-latest.md"
+    loading_group: "documentation-runtime"
+    require_reason_when_not_impacted: true
+    preserve_token_economy: true
+
+  project_discovery:
+    enabled: true
+    mode: "conditional"
+    policy: ".agents/config/project-discovery-policy.yaml"
+    protocol: ".agents/protocols/project-discovery-protocol.md"
+    workflow: ".agents/workflows/project-discovery-workflow.md"
+    report_template: ".agents/reports/discovery/project-discovery-template.md"
+    decision_log_template: ".agents/reports/discovery/decision-log-template.md"
+    loading_group: "discovery"
+    require_operator_confirmation_before_planning: true
+    preserve_token_economy: true
+
+  real_project_adapter:
+    enabled: true
+    mode: "conditional"
+    config: ".agents/config/project.yaml"
+    protocol: ".agents/protocols/real-project-adapter-protocol.md"
+    workflow: ".agents/workflows/real-project-adapter-workflow.md"
+    status_template: ".agents/reports/adapters/real-project-adapter-status-template.md"
+    loading_group: "adapter"
+    default_execution_mode: "analysis_only"
+    require_plan_before_changes: true
+    require_approval_before_apply: true
+    protect_configured_paths: true
+
+  real_project_execution:
+    enabled: true
+    mode: "dry_run_first"
+    protocol: ".agents/protocols/developer-real-project-execution-protocol.md"
+    workflow: ".agents/workflows/real-project-execution-workflow.md"
+    run_tool: ".agents/tools/run-real-project-execution.ps1"
+    test_tool: ".agents/tools/test-real-project-execution.ps1"
+    report_template: ".agents/reports/executions/real-project-execution-plan-template.md"
+    latest_report: ".agents/reports/executions/real-project-latest.md"
+    adapter_required: true
+    dry_run_default: true
+    require_plan_before_changes: true
+    require_approval_before_apply: true
+    backup_before_mutation: true
+    protected_paths_enforced: true
+
+  real_project_execution_hardening:
+    enabled: true
+    protocol: ".agents/protocols/real-project-execution-hardening-protocol.md"
+    check_tool: ".agents/tools/check-real-project-hardening.ps1"
+    backup_directory: ".agents/backups/real-project-execution"
+    audit_log: ".agents/reports/executions/real-project-audit-latest.md"
+    restore_supported: true
+    controlled_apply_fixture_required: true
+    protected_path_override_requires_reason: true
+
+  command_allowlist_quality_gates:
+    enabled: true
+    mode: "adapter_allowlist_only"
+    protocol: ".agents/protocols/command-allowlist-quality-gate-protocol.md"
+    run_tool: ".agents/tools/run-quality-gates.ps1"
+    test_tool: ".agents/tools/test-quality-gate-runner.ps1"
+    check_tool: ".agents/tools/check-command-allowlist.ps1"
+    report_template: ".agents/reports/executions/command-quality-gate-report-template.md"
+    latest_report: ".agents/reports/executions/quality-gates-latest.md"
+    loading_group: "quality-gates"
+    require_allowed_true: true
+    deny_destructive_commands: true
+    preserve_token_economy: true
+
+  real_project_apply_scenario:
+    enabled: true
+    mode: "isolated_fixture_only"
+    protocol: ".agents/protocols/real-project-apply-scenario-protocol.md"
+    test_tool: ".agents/tools/test-real-project-apply-scenario.ps1"
+    check_tool: ".agents/tools/check-real-project-apply-scenario.ps1"
+    report_template: ".agents/reports/executions/real-project-apply-scenario-template.md"
+    latest_report: ".agents/reports/executions/real-project-apply-scenario-latest.md"
+    loading_group: "real-apply-scenario"
+    require_pre_apply_quality_gate: true
+    require_post_apply_quality_gate: true
+    require_backup_evidence: true
+    require_audit_evidence: true
+    preserve_token_economy: true
+
+  release_evidence_bundle:
+    enabled: true
+    mode: "compact_release_audit_index"
+    protocol: ".agents/protocols/release-evidence-bundle-protocol.md"
+    run_tool: ".agents/tools/run-release-evidence-bundle.ps1"
+    test_tool: ".agents/tools/test-release-evidence-bundle.ps1"
+    check_tool: ".agents/tools/check-release-evidence-bundle.ps1"
+    report_template: ".agents/reports/releases/release-evidence-template.md"
+    latest_report: ".agents/reports/releases/release-evidence-latest.md"
+    loading_group: "release-evidence"
+    preserve_token_economy: true
+
+  operational_score_review:
+    enabled: true
+    mode: "compact_score_risk_token_review"
+    protocol: ".agents/protocols/operational-polish-score-review-protocol.md"
+    run_tool: ".agents/tools/run-operational-score-review.ps1"
+    check_tool: ".agents/tools/check-operational-score-review.ps1"
+    report_template: ".agents/reports/operational/score-review-template.md"
+    latest_report: ".agents/reports/operational/score-review-latest.md"
+    loading_group: "operational-review"
+    minimum_target_score: 9.7
+    preserve_token_economy: true
+
+  evolution:
+    track_growth: true
+    evolution_log: ".agents/memory/evolution-log"
+
+  # Auto-Escalation — start lean, scale up when needed
+  auto_escalation:
+    enabled: true
+    notify_user: true
+    max_escalation_per_request: 2
+    allow_skip_level: false
+    de_escalation: true
+    default_start_level: "auto"
+
+    trigger_thresholds:
+      lite_to_standard:
+        min_relevant_agents: 3
+        new_files_detected: true
+        cross_module_changes: 2
+      standard_to_deep:
+        security_flag: true
+        platform_fail: true
+        phases_threshold: 3
+        negative_memory: true
+        agent_conflict: true
+      deep_to_critical:
+        regulatory_data: true
+        production_scope: true
+        high_severity_security: true
+
+  # Session Checkpoint — persist state between sessions
+  session_checkpoint:
+    enabled: true
+    auto_save: true
+    checkpoint_path: ".agents/memory/context-db"
+
+  memory_consultation:
+    enabled: true
+    mode: "triggered"
+    policy: ".agents/config/memory-policy.yaml"
+    protocol: ".agents/protocols/memory-consultation-protocol.md"
+    index_first: true
+    tier_aware: true
+
+  release_governance:
+    pre_release_gate: ".agents/tools/pre-release-gate.ps1"
+    package_checklist: ".agents/releases/PACKAGE-CHECKLIST.md"
+    package_verification: "manifest-required-files"
+    kernel_contract: ".agents/kernel/KERNEL.md"
+    compatibility_policy: ".agents/kernel/COMPATIBILITY.md"
+
+  install_update:
+    compare_tool: ".agents/tools/compare-framework-version.ps1"
+    install_tool: ".agents/tools/install-framework.ps1"
+    update_tool: ".agents/tools/update-framework.ps1"
+    dry_run_default: true
+    backup_before_update: true
+    preserve_project_config: true
+
+  install_update_wizard:
+    enabled: true
+    mode: "operator_guided_dry_run_first"
+    protocol: ".agents/protocols/install-update-wizard-protocol.md"
+    check_tool: ".agents/tools/check-install-update-wizard.ps1"
+    kernel_guide: ".agents/kernel/INSTALL-UPDATE.md"
+    en_guide: ".agents/docs/en/20-INSTALL-UPDATE-WIZARD.md"
+    pt_br_guide: ".agents/docs/pt-br/20-WIZARD-DE-INSTALACAO-E-UPDATE.md"
+    loading_group: "install-update-wizard"
+    require_dry_run_before_apply: true
+    preserve_project_config: true
+    preserve_token_economy: true
+
+  optional_telemetry_memory_proof:
+    enabled: true
+    mode: "optional_compact_evidence"
+    protocol: ".agents/protocols/optional-telemetry-memory-proof-protocol.md"
+    run_tool: ".agents/tools/run-memory-proof.ps1"
+    check_tool: ".agents/tools/check-memory-proof.ps1"
+    report_template: ".agents/reports/memory/memory-proof-template.md"
+    latest_report: ".agents/reports/memory/memory-proof-latest.md"
+    loading_group: "memory-proof"
+    retention_tool: ".agents/tools/cleanup-telemetry.ps1"
+    retention_mode: "manual_dry_run_first"
+    preserve_token_economy: true
+
+  operator_experience_review:
+    enabled: true
+    mode: "operator_intent_map_and_stale_entrypoint_check"
+    protocol: ".agents/protocols/final-operator-experience-review-protocol.md"
+    run_tool: ".agents/tools/run-operator-experience-review.ps1"
+    check_tool: ".agents/tools/check-operator-experience.ps1"
+    report_template: ".agents/reports/operator/operator-experience-template.md"
+    latest_report: ".agents/reports/operator/operator-experience-latest.md"
+    en_guide: ".agents/docs/en/22-OPERATOR-EXPERIENCE-MAP.md"
+    pt_br_guide: ".agents/docs/pt-br/22-MAPA-DE-EXPERIENCIA-DO-OPERADOR.md"
+    loading_group: "operator-experience"
+    preserve_token_economy: true
+
+  inter_agent_communication_bus:
+    enabled: true
+    mode: "compact_auditable_messages"
+    config: ".agents/config/communication-bus.yaml"
+    protocol: ".agents/protocols/inter-agent-communication-bus-protocol.md"
+    run_tool: ".agents/tools/run-communication-bus-proof.ps1"
+    check_tool: ".agents/tools/check-communication-bus.ps1"
+    report_template: ".agents/reports/communication/communication-bus-template.md"
+    latest_report: ".agents/reports/communication/communication-bus-latest.md"
+    loading_group: "communication-bus"
+    no_full_agent_transcripts: true
+    preserve_token_economy: true
+
+  unified_operator_cli:
+    enabled: true
+    mode: "safe_wrapper_over_existing_tools"
+    protocol: ".agents/protocols/unified-operator-cli-protocol.md"
+    cli_tool: ".agents/tools/hephaestus.ps1"
+    check_tool: ".agents/tools/check-unified-cli.ps1"
+    en_guide: ".agents/docs/en/24-UNIFIED-OPERATOR-CLI.md"
+    pt_br_guide: ".agents/docs/pt-br/24-CLI-UNIFICADO-DO-OPERADOR.md"
+    loading_group: "operator-cli"
+    dry_run_install_update_default: true
+    preserve_token_economy: true
+
+  core_contract_drift_guard:
+    enabled: true
+    mode: "compact_core_alignment_check"
+    protocol: ".agents/protocols/core-contract-drift-guard-protocol.md"
+    check_tool: ".agents/tools/check-core-contract.ps1"
+    en_guide: ".agents/docs/en/25-CORE-CONTRACT-DRIFT-GUARD.md"
+    pt_br_guide: ".agents/docs/pt-br/25-GUARDA-DE-DERIVA-DO-CONTRATO-CENTRAL.md"
+    loading_group: "core-contract"
+    protect_always_loaded_contract: true
+    preserve_token_economy: true
+
+  operator_daily_launcher:
+    enabled: true
+    mode: "intent_based_daily_entrypoints"
+    protocol: ".agents/protocols/operator-daily-launcher-protocol.md"
+    run_tool: ".agents/tools/operator-daily.ps1"
+    install_launcher: ".agents/tools/install-hephaestus-launcher.ps1"
+    windows_launcher: ".agents/tools/install-hephaestus.bat"
+    check_tool: ".agents/tools/check-operator-daily-launcher.ps1"
+    en_guide: ".agents/docs/en/26-OPERATOR-DAILY-LAUNCHER.md"
+    pt_br_guide: ".agents/docs/pt-br/26-LANCADOR-DIARIO-DO-OPERADOR.md"
+    loading_group: "operator-daily"
+    dry_run_install_default: true
+    create_first_call_prompt_on_apply: true
+    preserve_token_economy: true
+
+  project_bootstrap_assistant:
+    enabled: true
+    mode: "analysis_only_discovery_adapter_bridge"
+    protocol: ".agents/protocols/project-bootstrap-assistant-protocol.md"
+    run_tool: ".agents/tools/run-project-bootstrap.ps1"
+    check_tool: ".agents/tools/check-project-bootstrap.ps1"
+    report_template: ".agents/reports/adapters/project-bootstrap-template.md"
+    latest_report: ".agents/reports/adapters/project-bootstrap-latest.md"
+    adapter_draft: ".agents/reports/adapters/project-adapter-draft.yaml"
+    en_guide: ".agents/docs/en/27-PROJECT-BOOTSTRAP-ASSISTANT.md"
+    pt_br_guide: ".agents/docs/pt-br/27-ASSISTENTE-DE-BOOTSTRAP-DE-PROJETO.md"
+    loading_group: "project-bootstrap"
+    never_enable_commands_automatically: true
+    preserve_token_economy: true
+
+  stability_baseline_regression_sentinel:
+    enabled: true
+    mode: "compact_regression_baseline"
+    baseline: ".agents/config/stability-baseline.yaml"
+    protocol: ".agents/protocols/stability-baseline-regression-sentinel-protocol.md"
+    run_tool: ".agents/tools/run-stability-baseline.ps1"
+    check_tool: ".agents/tools/check-stability-baseline.ps1"
+    report_template: ".agents/reports/operational/stability-baseline-template.md"
+    latest_report: ".agents/reports/operational/stability-baseline-latest.md"
+    en_guide: ".agents/docs/en/28-STABILITY-BASELINE.md"
+    pt_br_guide: ".agents/docs/pt-br/28-BASELINE-DE-ESTABILIDADE.md"
+    loading_group: "stability-baseline"
+    preserve_token_economy: true
+
+  operator_runbook_recovery:
+    enabled: true
+    mode: "compact_operator_runbook_and_recovery_flow"
+    protocol: ".agents/protocols/operator-runbook-recovery-protocol.md"
+    check_tool: ".agents/tools/check-operator-runbook.ps1"
+    en_guide: ".agents/docs/en/29-OPERATOR-RUNBOOK-RECOVERY.md"
+    pt_br_guide: ".agents/docs/pt-br/29-RUNBOOK-E-RECUPERACAO-DO-OPERADOR.md"
+    loading_group: "operator-runbook"
+    dry_run_first_for_install_update: true
+    preserve_token_economy: true
+
+  guided_installer_repository_onboarding:
+    enabled: true
+    mode: "guided_repository_intent_and_first_call_handoff"
+    protocol: ".agents/protocols/guided-installer-repository-onboarding-protocol.md"
+    check_tool: ".agents/tools/check-guided-installer.ps1"
+    launcher: ".agents/tools/install-hephaestus-launcher.ps1"
+    windows_launcher: ".agents/tools/install-hephaestus.bat"
+    en_guide: ".agents/docs/en/30-GUIDED-INSTALLER-REPOSITORY-ONBOARDING.md"
+    pt_br_guide: ".agents/docs/pt-br/30-INSTALADOR-GUIADO-E-ONBOARDING-DE-REPOSITORIO.md"
+    loading_group: "guided-installer"
+    repository_modes: ["none", "local", "github", "gitlab", "bitbucket", "other", "existing"]
+    first_call_handoff_required: true
+    no_git_mutation_by_installer: true
+    preserve_token_economy: true
+
+  practical_first_project_walkthrough:
+    enabled: true
+    mode: "operator_first_project_step_by_step"
+    protocol: ".agents/protocols/practical-first-project-walkthrough-protocol.md"
+    check_tool: ".agents/tools/check-first-project-walkthrough.ps1"
+    en_guide: ".agents/docs/en/31-PRACTICAL-FIRST-PROJECT-WALKTHROUGH.md"
+    pt_br_guide: ".agents/docs/pt-br/31-PASSO-A-PASSO-PRATICO-DO-PRIMEIRO-PROJETO.md"
+    loading_group: "first-project-walkthrough"
+    covers_new_and_existing_projects: true
+    first_call_required_before_operational_use: true
+    preserve_token_economy: true
+
+  simulation:
+    harness: ".agents/tools/run-framework-simulation.ps1"
+    test_harness: ".agents/tools/test-simulation-harness.ps1"
+    report_directory: ".agents/reports/simulations"
+    isolated_workspace_default: true
+    cleanup_workspace_default: true
+
+  developer_execution:
+    mode: "controlled_simulation_and_real_project_dry_run"
+    harness: ".agents/tools/run-developer-execution-simulation.ps1"
+    test_harness: ".agents/tools/test-developer-execution-mode.ps1"
+    benchmark_harness: ".agents/tools/run-developer-benchmark.ps1"
+    benchmark_test: ".agents/tools/test-developer-benchmark.ps1"
+    benchmark_scenarios:
+      - "profile-card"
+      - "docs-update"
+      - "bug-fix"
+      - "validation-failure"
+      - "api"
+      - "database-migration"
+      - "refactor"
+      - "security-fix"
+      - "failing-tests"
+      - "docs-only-release"
+    report_directory: ".agents/reports/executions"
+    isolated_workspace_default: true
+    cleanup_workspace_default: true
+    project_mutation_scope: "temporary_workspace_only"

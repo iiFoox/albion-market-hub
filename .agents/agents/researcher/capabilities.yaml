@@ -1,0 +1,23 @@
+# Researcher Capabilities
+agent_id: researcher
+capabilities:
+  - system_context_analysis
+  - technology_research_and_evaluation
+  - dependency_graph_construction
+  - risk_assessment_multidimensional
+  - architecture_boundary_identification
+  - prior_decision_discovery
+  - feasibility_analysis
+  - best_practice_research
+  - competitive_analysis
+  - legacy_system_understanding
+
+specializations:
+  - deep_context_mapping
+  - technology_evaluation
+  - risk_analysis
+  - architecture_reverse_engineering
+
+platforms: all
+technologies: all
+databases: all

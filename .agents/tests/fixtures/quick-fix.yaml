@@ -1,0 +1,14 @@
+id: "quick-fix"
+request: "Fix a typo in the settings screen label."
+expected:
+  min_level: "LITE"
+  workflow: "quick-fix"
+  required_agents:
+    - "orchestrator"
+    - "builder"
+  optional_agents:
+    - "validator"
+    - "delivery"
+  forbidden_agents: []
+  triggers:
+    - "fix"

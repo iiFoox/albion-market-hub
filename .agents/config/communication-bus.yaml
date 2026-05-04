@@ -1,0 +1,55 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Inter-Agent Communication Bus
+# =============================================================================
+# Compact message contract for auditable agent-to-agent communication.
+# =============================================================================
+
+bus:
+  version: "8.0.0"
+  protocol: ".agents/protocols/inter-agent-communication-bus-protocol.md"
+  report_directory: ".agents/reports/communication"
+  latest_report: ".agents/reports/communication/communication-bus-latest.md"
+
+message_contract:
+  required_fields:
+    - "message_id"
+    - "correlation_id"
+    - "pipeline_id"
+    - "timestamp"
+    - "from_agent"
+    - "to_agent"
+    - "message_type"
+    - "priority"
+    - "summary"
+    - "status"
+
+  allowed_types:
+    - "handoff"
+    - "consultation"
+    - "broadcast"
+    - "alert"
+    - "conflict"
+    - "decision"
+    - "correction"
+
+  allowed_priorities:
+    - "critical"
+    - "high"
+    - "normal"
+    - "low"
+
+  allowed_statuses:
+    - "created"
+    - "accepted"
+    - "rejected"
+    - "resolved"
+    - "superseded"
+
+rules:
+  dry_run_first: true
+  compact_by_default: true
+  no_full_agent_transcripts: true
+  route_non_adjacent_agents_through_orchestrator: true
+  preserve_token_economy: true
+
+

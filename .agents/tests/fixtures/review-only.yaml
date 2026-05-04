@@ -1,0 +1,17 @@
+id: "review-only"
+request: "Review this pull request for regressions, maintainability, and missing tests. Do not edit files."
+expected:
+  min_level: "STANDARD"
+  workflow: "review-only"
+  required_agents:
+    - "orchestrator"
+    - "validator"
+  optional_agents:
+    - "researcher"
+    - "planner"
+    - "documentation"
+  forbidden_agents:
+    - "builder"
+  triggers:
+    - "review"
+    - "do not edit files"

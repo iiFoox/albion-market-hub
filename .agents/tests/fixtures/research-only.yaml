@@ -1,0 +1,16 @@
+id: "research-only"
+request: "Research whether we should use Redis or Postgres for session storage. Do not change files."
+expected:
+  min_level: "STANDARD"
+  workflow: "research-only"
+  required_agents:
+    - "orchestrator"
+    - "researcher"
+  optional_agents:
+    - "planner"
+    - "project-manager"
+  forbidden_agents:
+    - "builder"
+  triggers:
+    - "research"
+    - "do not change files"

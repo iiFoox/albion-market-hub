@@ -1,0 +1,19 @@
+id: "security-auth"
+request: "Review and fix authentication token refresh to prevent unauthorized access."
+expected:
+  min_level: "DEEP"
+  workflow: "full-pipeline"
+  required_agents:
+    - "orchestrator"
+    - "researcher"
+    - "planner"
+    - "builder"
+    - "validator"
+    - "documentation"
+  optional_agents:
+    - "delivery"
+    - "project-manager"
+  forbidden_agents: []
+  triggers:
+    - "auth"
+    - "security"

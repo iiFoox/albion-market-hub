@@ -1,0 +1,72 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Project Overrides Template
+# =============================================================================
+# Optional project-specific overrides. Keep this file small and explicit.
+# =============================================================================
+
+project:
+  id: ""
+  name: ""
+  profile: ""
+  root: "."
+  description: ""
+  maturity: ""
+
+stack:
+  languages: []
+  frameworks: []
+  runtime: []
+  databases: []
+  package_manager: ""
+  platforms: []
+
+commands:
+  install:
+    command: ""
+    allowed: false
+  test:
+    command: ""
+    allowed: false
+  lint:
+    command: ""
+    allowed: false
+  build:
+    command: ""
+    allowed: false
+  format:
+    command: ""
+    allowed: false
+  dev:
+    command: ""
+    allowed: false
+
+paths:
+  source: []
+  tests: []
+  docs: []
+  generated: []
+  protected:
+    - ".git/"
+    - ".agents/"
+    - ".env"
+    - ".env.*"
+    - "secrets.*"
+    - "credentials.*"
+
+execution:
+  mode: "analysis_only" # analysis_only | dry_run | controlled
+  require_plan_before_changes: true
+  require_approval_before_apply: true
+  backup_before_mutation: true
+  allow_destructive_commands: false
+
+quality_gates:
+  required: []
+  optional: []
+  manual: []
+
+overrides:
+  language:
+    communication: ""
+  active_profiles: []
+  notes: []

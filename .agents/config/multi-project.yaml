@@ -1,0 +1,15 @@
+# =============================================================================
+# HEPHAESTUS Agent Framework — Multi-Project Template
+# =============================================================================
+# Optional configuration for workspaces that coordinate multiple projects.
+# =============================================================================
+
+multi_project:
+  enabled: false
+  primary_project: ""
+  projects: []
+
+coordination:
+  shared_memory: false
+  shared_standards: true
+  notes: []
