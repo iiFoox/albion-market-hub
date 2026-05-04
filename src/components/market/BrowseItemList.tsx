@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import type { AlbionItemMini } from '../../types';
 
 type Props = {
@@ -6,11 +6,31 @@ type Props = {
   onPickItem: (item: AlbionItemMini) => void;
 };
 
-// Limit visible rows for performance without needing react-window
-const MAX_VISIBLE = 400;
+// Desktop: cap at 400 for performance. Mobile: start at 10, expand to all.
+const DESKTOP_MAX = 400;
+const MOBILE_INITIAL = 10;
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(() => window.innerWidth < 900);
+  useEffect(() => {
+    const handler = () => setMobile(window.innerWidth < 900);
+    window.addEventListener('resize', handler, { passive: true });
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return mobile;
+}
 
 export function BrowseItemList({ items, onPickItem }: Props) {
-  const visible = useMemo(() => items.slice(0, MAX_VISIBLE), [items]);
+  const isMobile = useIsMobile();
+  const [showAll, setShowAll] = useState(false);
+
+  // Reset "show all" when items change (e.g. filter/search changes)
+  useEffect(() => { setShowAll(false); }, [items]);
+
+  const visible = useMemo(() => {
+    if (isMobile && !showAll) return items.slice(0, MOBILE_INITIAL);
+    return items.slice(0, DESKTOP_MAX);
+  }, [items, isMobile, showAll]);
 
   if (items.length === 0) {
     return (
@@ -24,13 +44,13 @@ export function BrowseItemList({ items, onPickItem }: Props) {
     <div
       className="browse-list-wrap"
       style={{
-        overflowY: 'auto',
-        maxHeight: '520px',
+        overflowY: isMobile ? 'visible' : 'auto',
+        maxHeight: isMobile ? 'none' : '520px',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         gap: '6px',
-        paddingRight: '4px',
+        paddingRight: isMobile ? 0 : '4px',
       }}
     >
       {visible.map((item) => (
@@ -81,9 +101,38 @@ export function BrowseItemList({ items, onPickItem }: Props) {
           </code>
         </button>
       ))}
-      {items.length > MAX_VISIBLE && (
+
+      {/* Mobile: show more button */}
+      {isMobile && !showAll && items.length > MOBILE_INITIAL && (
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          style={{
+            marginTop: '8px',
+            width: '100%',
+            padding: '12px',
+            background: 'transparent',
+            border: '1px dashed var(--gold-dim)',
+            borderRadius: '8px',
+            color: 'var(--gold)',
+            fontWeight: 700,
+            fontSize: '14px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+          }}
+        >
+          <span>📋</span>
+          Mostrar mais ({items.length - MOBILE_INITIAL} restantes)
+        </button>
+      )}
+
+      {/* Desktop: overflow notice */}
+      {!isMobile && items.length > DESKTOP_MAX && (
         <div style={{ textAlign: 'center', padding: '12px', color: 'var(--text-muted)', fontSize: '12px', fontStyle: 'italic' }}>
-          Mostrando {MAX_VISIBLE} de {items.length} itens. Refine a busca ou use os filtros para ver mais.
+          Mostrando {DESKTOP_MAX} de {items.length} itens. Refine a busca ou use os filtros para ver mais.
         </div>
       )}
     </div>

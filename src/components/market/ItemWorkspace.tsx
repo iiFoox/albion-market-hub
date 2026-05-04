@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { CITY_COLORS, MARKET_CITIES, QUALITY_LABELS_PT } from '../../config';
 import { formatPrice, formatRelativeTime, freshnessClass } from '../../lib/formatPrice';
 import { inferTier, stripEnchant } from '../../lib/sidebarGroup';
@@ -23,7 +23,6 @@ type Props = {
 };
 
 const TIER_HEX = ['#555', '#5c8a3a', '#3a6e8a', '#8a7a3a', '#c94c4c', '#8c4cc9', '#4c7ac9', '#c9a84c'];
-
 const ENCHANT_LABELS = ['Normal', '+1', '+2', '+3', '+4'];
 
 function categoryLabel(cat: string): string {
@@ -32,6 +31,16 @@ function categoryLabel(cat: string): string {
   if (cat.startsWith('Off-hand')) return 'Off-hand';
   if (cat.includes('Comida')) return 'Consumível';
   return cat.split('—')[0]?.trim() ?? cat;
+}
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(() => window.innerWidth < 900);
+  useEffect(() => {
+    const handler = () => setMobile(window.innerWidth < 900);
+    window.addEventListener('resize', handler, { passive: true });
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return mobile;
 }
 
 export function ItemWorkspace({
@@ -49,6 +58,7 @@ export function ItemWorkspace({
   onClose,
   onSwitchTier,
 }: Props) {
+  const isMobile = useIsMobile();
   const baseId = stripEnchant(item.id);
   const tier = inferTier(baseId);
   const tierColor = TIER_HEX[Math.min(Math.max(tier - 1, 0), 7)];
@@ -93,7 +103,7 @@ export function ItemWorkspace({
   }, [prices, byCity]);
 
   return (
-    <div id="itemView" className="item-workspace fade-in-up" style={{ marginBottom: '60px' }}>
+    <div id="itemView" className="item-workspace fade-in-up" style={{ marginBottom: '60px', padding: isMobile ? '12px' : '0' }}>
       {onClose && (
         <button
           type="button"
@@ -117,19 +127,22 @@ export function ItemWorkspace({
           &larr; Voltar
         </button>
       )}
+
       {/* Hero Header */}
       <div className="item-header-responsive" style={{
         display: 'flex',
-        gap: '32px',
-        alignItems: 'flex-start',
-        marginBottom: '40px',
-        position: 'relative'
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '20px' : '32px',
+        alignItems: isMobile ? 'center' : 'flex-start',
+        marginBottom: isMobile ? '30px' : '40px',
+        position: 'relative',
+        textAlign: isMobile ? 'center' : 'left'
       }}>
         {/* Glow behind image */}
         <div style={{
           position: 'absolute',
-          top: '50%',
-          left: '60px',
+          top: isMobile ? '60px' : '50%',
+          left: isMobile ? '50%' : '60px',
           width: '120px',
           height: '120px',
           background: tierColor,
@@ -146,45 +159,45 @@ export function ItemWorkspace({
             src={`https://render.albiononline.com/v1/item/${resolvedItemId}.png?quality=${quality}`}
             alt={item.name}
             className="item-icon-box-large"
-            style={{ width: '120px', height: '120px', objectFit: 'contain', filter: `drop-shadow(0 0 20px ${tierColor}80)` }}
+            style={{ width: isMobile ? '100px' : '120px', height: isMobile ? '100px' : '120px', objectFit: 'contain', filter: `drop-shadow(0 0 20px ${tierColor}80)` }}
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
         </div>
 
-        <div className="item-header-info" style={{ flex: 1, zIndex: 1, display: 'flex', flexDirection: 'column' }}>
-          <div className="item-meta-responsive" style={{ display: 'flex', gap: '12px', marginBottom: '8px', flexWrap: 'wrap' }}>
+        <div className="item-header-info" style={{ flex: 1, zIndex: 1, display: 'flex', flexDirection: 'column', width: isMobile ? '100%' : 'auto' }}>
+          <div className="item-meta-responsive" style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
             <span style={{ 
               background: `${tierColor}20`, 
               color: tierColor, 
               border: `1px solid ${tierColor}40`,
-              padding: '4px 12px',
+              padding: '4px 10px',
               borderRadius: '4px',
-              fontSize: '12px',
+              fontSize: '11px',
               fontWeight: 800,
-              letterSpacing: '2px'
+              letterSpacing: '1px'
             }}>TIER {tier || '?'}</span>
             <span style={{
               background: 'var(--bg-secondary)',
               color: 'var(--text-muted)',
-              padding: '4px 12px',
+              padding: '4px 10px',
               borderRadius: '4px',
-              fontSize: '12px',
+              fontSize: '11px',
               fontWeight: 600,
               textTransform: 'uppercase'
             }}>{categoryLabel(item.category)}</span>
             <span style={{
               color: 'var(--text-faded)',
               padding: '4px 0',
-              fontSize: '12px',
+              fontSize: '11px',
               fontFamily: 'var(--font-mono)'
             }}>{resolvedItemId}</span>
           </div>
 
           <h2 className="item-title-responsive" style={{ 
-            fontSize: '48px', 
-            margin: '0 0 24px 0', 
+            fontSize: isMobile ? '28px' : '48px', 
+            margin: '0 0 20px 0', 
             fontFamily: 'var(--font-heading)',
             fontWeight: 800,
             lineHeight: 1.1,
@@ -193,11 +206,11 @@ export function ItemWorkspace({
             {item.name} <span style={{ color: 'var(--gold)' }}>{enchantLevel > 0 ? `.${enchantLevel}` : ''}</span>
           </h2>
 
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'inherit' }}>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
             {/* Tier Selector */}
             {onSwitchTier && tier > 0 && (
               <div 
-                style={{ display: 'flex', gap: '4px', background: 'var(--bg-card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border)', flexWrap: 'wrap' }}
+                style={{ display: 'flex', gap: '2px', background: 'var(--bg-card)', padding: '3px', borderRadius: '10px', border: '1px solid var(--border)', flexWrap: 'nowrap' }}
                 role="group"
                 aria-label="Selecionar Tier"
               >
@@ -209,11 +222,11 @@ export function ItemWorkspace({
                     style={{
                       background: tier === t ? 'var(--text-primary)' : 'transparent',
                       color: tier === t ? 'var(--bg-primary)' : 'var(--text-muted)',
-                      padding: '6px 12px',
-                      borderRadius: '8px',
+                      padding: isMobile ? '6px 10px' : '6px 12px',
+                      borderRadius: '7px',
                       cursor: 'pointer',
                       fontWeight: 800,
-                      fontSize: '14px',
+                      fontSize: '13px',
                       border: 'none',
                       transition: 'all 0.2s'
                     }}
@@ -226,7 +239,7 @@ export function ItemWorkspace({
 
             {/* Enchant Selector */}
             <div 
-              style={{ display: 'flex', gap: '4px', background: 'var(--bg-card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border)', flexWrap: 'wrap' }}
+              style={{ display: 'flex', gap: '2px', background: 'var(--bg-card)', padding: '3px', borderRadius: '10px', border: '1px solid var(--border)', flexWrap: 'nowrap' }}
               role="group"
               aria-label="Selecionar Encantamento"
             >
@@ -238,16 +251,16 @@ export function ItemWorkspace({
                   style={{
                     background: enchantLevel === idx ? 'var(--gold)' : 'transparent',
                     color: enchantLevel === idx ? 'var(--bg-primary)' : 'var(--text-muted)',
-                    padding: '6px 16px',
-                    borderRadius: '8px',
+                    padding: isMobile ? '6px 10px' : '6px 16px',
+                    borderRadius: '7px',
                     cursor: 'pointer',
                     fontWeight: 800,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     border: 'none',
                     transition: 'all 0.2s'
                   }}
                 >
-                  {lbl}
+                  {isMobile ? `.${idx}` : lbl}
                 </button>
               ))}
             </div>
@@ -256,38 +269,38 @@ export function ItemWorkspace({
       </div>
 
       {/* Brutalist Stats */}
-      <div className="responsive-grid-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-        <div className="glass-panel glow-hover" style={{ padding: '24px', borderRadius: '16px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Menor Venda (Global)</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--gold-light)' }}>
+      <div className="responsive-grid-stats" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fit, minmax(200px, 1fr))', gap: isMobile ? '12px' : '20px', marginBottom: '30px' }}>
+        <div className="glass-panel" style={{ padding: isMobile ? '16px' : '24px', borderRadius: '16px' }}>
+          <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Venda Mín.</div>
+          <div style={{ fontSize: isMobile ? '20px' : '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--gold-light)' }}>
             {stats.minSell ? formatPrice(stats.minSell) : '—'}
           </div>
         </div>
-        <div className="glass-panel glow-hover" style={{ padding: '24px', borderRadius: '16px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Maior Compra (Global)</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--green-light)' }}>
+        <div className="glass-panel" style={{ padding: isMobile ? '16px' : '24px', borderRadius: '16px' }}>
+          <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Compra Máx.</div>
+          <div style={{ fontSize: isMobile ? '20px' : '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--green-light)' }}>
             {stats.maxBuy ? formatPrice(stats.maxBuy) : '—'}
           </div>
         </div>
-        <div className="glass-panel glow-hover" style={{ padding: '24px', borderRadius: '16px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Spread (Diferença)</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--text-primary)' }}>
+        <div className="glass-panel" style={{ padding: isMobile ? '16px' : '24px', borderRadius: '16px' }}>
+          <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Spread</div>
+          <div style={{ fontSize: isMobile ? '20px' : '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--text-primary)' }}>
             {stats.spread ? formatPrice(stats.spread) : '—'}
           </div>
         </div>
-        <div className="glass-panel glow-hover" style={{ padding: '24px', borderRadius: '16px', border: '1px solid var(--gold-dim)' }}>
-          <div style={{ fontSize: '12px', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Melhor Flip Estimado</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--gold)' }}>
-            {stats.bestFlip ? `+ ${formatPrice(stats.bestFlip)}` : '—'}
+        <div className="glass-panel" style={{ padding: isMobile ? '16px' : '24px', borderRadius: '16px', border: '1px solid var(--gold-dim)' }}>
+          <div style={{ fontSize: '10px', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Melhor Flip</div>
+          <div style={{ fontSize: isMobile ? '20px' : '32px', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--gold)' }}>
+            {stats.bestFlip ? `+${formatPrice(stats.bestFlip)}` : '—'}
           </div>
         </div>
       </div>
 
-      {loadingPrices && <div style={{ color: 'var(--gold)', marginBottom: '20px', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>[ PROCESSANDO DADOS DE MERCADO... ]</div>}
-      {priceError && <div style={{ color: 'var(--red)', marginBottom: '20px', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>[ ERRO DE SENSOR: {priceError} ]</div>}
+      {loadingPrices && <div style={{ color: 'var(--gold)', marginBottom: '20px', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>[ PROCESSANDO DADOS... ]</div>}
+      {priceError && <div style={{ color: 'var(--red)', marginBottom: '20px', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>[ ERRO: {priceError} ]</div>}
 
       <div className="price-section fade-in">
-        <div className="section-header">
+        <div className="section-header" style={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', gap: isMobile ? '12px' : '0' }}>
           <div className="section-title">
             💹 Preços por cidade
             {onRefresh && (
@@ -295,7 +308,6 @@ export function ItemWorkspace({
                 type="button"
                 onClick={onRefresh}
                 className="refresh-btn"
-                title="Atualizar Preços"
                 style={{
                   marginLeft: '12px',
                   background: 'none',
@@ -304,17 +316,14 @@ export function ItemWorkspace({
                   padding: '4px 8px',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '12px',
+                  fontSize: '11px',
                 }}
               >
-                🔄 Atualizar
+                🔄
               </button>
             )}
           </div>
-          <div className="section-actions">
-            <label className="sr-only" htmlFor="quality-select-main">
-              Qualidade
-            </label>
+          <div className="section-actions" style={{ width: isMobile ? '100%' : 'auto' }}>
             <select
               id="quality-select-main"
               className="quality-select"
@@ -325,10 +334,11 @@ export function ItemWorkspace({
                 color: 'var(--text-primary)',
                 border: '1px solid var(--border)',
                 borderRadius: '8px',
-                padding: '8px 16px',
+                padding: '8px 12px',
                 fontWeight: 600,
-                fontSize: '14px',
-                cursor: 'pointer'
+                fontSize: '13px',
+                cursor: 'pointer',
+                width: isMobile ? '100%' : 'auto'
               }}
             >
               {[1, 2, 3, 4, 5].map((q) => (
@@ -339,6 +349,7 @@ export function ItemWorkspace({
             </select>
           </div>
         </div>
+
         <div id="priceTableContainer" className="price-table-container">
           {loadingPrices && (
             <div className="loading-state">
@@ -352,71 +363,107 @@ export function ItemWorkspace({
             </div>
           )}
           {!loadingPrices && !priceError && prices.length === 0 && (
-            <div className="no-data">Sem dados de mercado para esta combinação.</div>
+            <div className="no-data">Sem dados de mercado.</div>
           )}
           {!loadingPrices && !priceError && prices.length > 0 && (
-            <table className="price-table">
-              <thead>
-                <tr>
-                  <th>Cidade</th>
-                  <th>Menor venda</th>
-                  <th>Maior compra</th>
-                  <th>Atualizado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {MARKET_CITIES.map((city) => {
-                  const row = byCity.get(city);
-                  const sell = row?.sell_price_min;
-                  const buy = row?.buy_price_max;
-                  const updated = row?.sell_price_min_date || row?.buy_price_max_date;
-                  const bestSell = stats.minSell != null && sell === stats.minSell && sell > 0;
-                  const bestBuy = stats.maxBuy != null && buy === stats.maxBuy && buy > 0;
+            <>
+              {isMobile ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {MARKET_CITIES.map((city) => {
+                    const row = byCity.get(city);
+                    const sell = row?.sell_price_min;
+                    const updated = row?.sell_price_min_date || row?.buy_price_max_date;
+                    const bestSell = stats.minSell != null && sell === stats.minSell && sell > 0;
 
-                  return (
-                    <tr key={city}>
-                      <td>
-                        <div className="city-cell">
-                          <div
-                            className="city-dot"
-                            style={{
-                              background: CITY_COLORS[city] ?? '#888',
-                              boxShadow: `0 0 6px ${CITY_COLORS[city] ?? '#888'}`,
-                            }}
-                          />
-                          <span className="city-name">{city}</span>
+                    return (
+                      <div key={city} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: CITY_COLORS[city] ?? '#888', flexShrink: 0 }} />
+                          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>{city}</span>
                         </div>
-                      </td>
-                      <td>
-                        {sell != null && sell > 0 ? (
-                          <>
-                            <span className="price-sell">{formatPrice(sell)}</span>
-                            {bestSell ? <span className="best-badge best-sell">melhor</span> : null}
-                          </>
-                        ) : (
-                          <span className="price-na">sem dados</span>
-                        )}
-                      </td>
-                      <td>
-                        {buy != null && buy > 0 ? (
-                          <>
-                            <span className="price-buy">{formatPrice(buy)}</span>
-                            {bestBuy ? <span className="best-badge best-buy">melhor</span> : null}
-                          </>
-                        ) : (
-                          <span className="price-na">sem dados</span>
-                        )}
-                      </td>
-                      <td>
-                        <span className={`updated-cell ${freshnessClass(updated)}`}>
-                          {formatRelativeTime(updated)}
-                        </span>
-                      </td>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Venda</div>
+                          {sell != null && sell > 0 ? (
+                            <div style={{ fontSize: '13px', fontWeight: 700, color: bestSell ? 'var(--gold)' : 'var(--gold-dim)', fontFamily: 'monospace' }}>
+                              {formatPrice(sell)}
+                            </div>
+                          ) : <span style={{ fontSize: '11px', color: 'var(--text-faded)' }}>—</span>}
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Atualizado</div>
+                          <span className={`updated-cell ${freshnessClass(updated)}`} style={{ fontSize: '10px' }}>
+                            {formatRelativeTime(updated)}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <table className="price-table">
+                  <thead>
+                    <tr>
+                      <th>Cidade</th>
+                      <th>Menor venda</th>
+                      <th>Maior compra</th>
+                      <th>Atualizado</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {MARKET_CITIES.map((city) => {
+                      const row = byCity.get(city);
+                      const sell = row?.sell_price_min;
+                      const buy = row?.buy_price_max;
+                      const updated = row?.sell_price_min_date || row?.buy_price_max_date;
+                      const bestSell = stats.minSell != null && sell === stats.minSell && sell > 0;
+                      const bestBuy = stats.maxBuy != null && buy === stats.maxBuy && buy > 0;
+
+                      return (
+                        <tr key={city}>
+                          <td>
+                            <div className="city-cell">
+                              <div
+                                className="city-dot"
+                                style={{
+                                  background: CITY_COLORS[city] ?? '#888',
+                                  boxShadow: `0 0 6px ${CITY_COLORS[city] ?? '#888'}`,
+                                }}
+                              />
+                              <span className="city-name">{city}</span>
+                            </div>
+                          </td>
+                          <td>
+                            {sell != null && sell > 0 ? (
+                              <>
+                                <span className="price-sell">{formatPrice(sell)}</span>
+                                {bestSell ? <span className="best-badge best-sell">melhor</span> : null}
+                              </>
+                            ) : (
+                              <span className="price-na">sem dados</span>
+                            )}
+                          </td>
+                          <td>
+                            {buy != null && buy > 0 ? (
+                              <>
+                                <span className="price-buy">{formatPrice(buy)}</span>
+                                {bestBuy ? <span className="best-badge best-buy">melhor</span> : null}
+                              </>
+                            ) : (
+                              <span className="price-na">sem dados</span>
+                            )}
+                          </td>
+                          <td>
+                            <span className={`updated-cell ${freshnessClass(updated)}`}>
+                              {formatRelativeTime(updated)}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -426,7 +473,7 @@ export function ItemWorkspace({
       <FlipPanel byCity={byCity} />
 
       <p className="data-disclaimer">
-        Dados da API da comunidade (Albion Online Data). Taxas e spreads são aproximados.
+        Dados da comunidade (Albion Data Project). spreads aproximados.
       </p>
     </div>
   );

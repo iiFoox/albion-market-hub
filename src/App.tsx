@@ -313,32 +313,11 @@ export default function App() {
           {!selected && currentTab === 'crafting' && (
             <div className="browse-section" style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '1200px', margin: '0 auto', width: '100%', marginBottom: '60px' }}>
               <div className="welcome-state glass-panel fade-in" style={{ padding: '32px 40px', borderRadius: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontSize: '36px', display: 'block', marginBottom: '12px' }}>⚒️</span>
-                    <h2 className="welcome-title" style={{ fontSize: '22px', margin: '0 0 8px 0' }}>Laboratório de Crafting</h2>
-                    <p className="welcome-sub" style={{ color: 'var(--text-muted)', margin: 0 }}>
-                      Selecione um item craftável para abrir a <strong>Calculadora de Produção</strong> com análise de custo, retorno e lucro por cidade.
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '240px' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Categorias suportadas</div>
-                    {[
-                      { icon: '⚙️', label: 'Recursos Refinados' },
-                      { icon: '⚔️', label: 'Armas' },
-                      { icon: '🛡️', label: 'Armaduras & Off-Hand' },
-                      { icon: '🎒', label: 'Mochilas & Capas' },
-                      { icon: '🧪', label: 'Poções' },
-                      { icon: '🍖', label: 'Comida' },
-                    ].map(cat => (
-                      <div key={cat.label} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                        <span>{cat.icon}</span>
-                        <span style={{ color: 'var(--text-primary)' }}>{cat.label}</span>
-                        <span style={{ marginLeft: 'auto', background: '#4caf7d22', color: '#4caf7d', fontSize: '10px', padding: '1px 6px', borderRadius: '4px', border: '1px solid #4caf7d44', fontWeight: 700 }}>✓</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <span style={{ fontSize: '36px', display: 'block', marginBottom: '12px' }}>⚒️</span>
+                <h2 className="welcome-title" style={{ fontSize: '22px', margin: '0 0 8px 0' }}>Laboratório de Crafting</h2>
+                <p className="welcome-sub" style={{ color: 'var(--text-muted)', margin: 0 }}>
+                  Selecione um item craftável para abrir a <strong>Calculadora de Produção</strong> com análise de custo, retorno e lucro por cidade.
+                </p>
               </div>
               <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
