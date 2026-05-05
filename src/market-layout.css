@@ -27,7 +27,8 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden; /* body never scrolls — scroll lives inside .main-content-scroll */
   overflow-x: hidden;
 }
 
@@ -61,42 +62,43 @@ img, video, svg {
 }
 
 #root {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden; /* locks the layout inside viewport */
 }
 
+/* Decorative ambient orbs: fixed so they never add to scroll height */
 #root::before, #root::after {
   content: '';
-  position: absolute;
-  width: 800px;
-  height: 800px;
+  position: fixed;
+  width: 700px;
+  height: 700px;
   border-radius: 50%;
   filter: blur(150px);
   -webkit-filter: blur(150px);
   z-index: -1;
-  opacity: 0.25;
+  opacity: 0.18;
   pointer-events: none;
   animation: floatOrb 15s ease-in-out infinite alternate;
 }
 
 #root::before {
   background: var(--purple-accent);
-  top: -200px;
-  left: -200px;
+  top: -150px;
+  left: -150px;
 }
 
 #root::after {
   background: var(--gold-dim);
-  bottom: -200px;
-  right: -200px;
+  bottom: -150px;
+  right: -150px;
   animation-delay: -7s;
 }
 
 @keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(100px, 50px) scale(1.2); }
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(60px, 30px) scale(1.15); }
 }
 
 /* Base App Layout */
@@ -104,6 +106,7 @@ img, video, svg {
   display: flex;
   width: 100%;
   height: 100vh;
+  overflow: hidden;
 }
 
 .app-sidebar-area {
@@ -115,17 +118,21 @@ img, video, svg {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 10;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* sidebar internal scroll */
+.app-sidebar-area::-webkit-scrollbar { width: 4px; }
+.app-sidebar-area::-webkit-scrollbar-track { background: transparent; }
+.app-sidebar-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
 .sidebar-overlay {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   z-index: 999;
@@ -135,16 +142,36 @@ img, video, svg {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow-y: hidden;
+  min-height: 0; /* critical: allows flex child to shrink below content size */
+  overflow: hidden;
   position: relative;
 }
 
 .main-content-scroll {
   flex: 1;
+  min-height: 0; /* critical: prevents flex child from overflowing parent */
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 32px;
+  /* custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
+
+.main-content-scroll::-webkit-scrollbar { width: 6px; }
+.main-content-scroll::-webkit-scrollbar-track { background: transparent; }
+.main-content-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+/* Spacing between content sections and the GoldPanel */
+.browse-section {
+  padding-bottom: 40px;
+}
+
+.gold-section {
+  margin-top: 40px;
+  padding-bottom: 24px;
+}
+
 
 .app-header {
   padding: 14px 28px;
@@ -1653,9 +1680,11 @@ img, video, svg {
     display: flex;
   }
 
-  /* Prevent content hidden behind bottom nav */
+  /* Prevent content hidden behind bottom nav — 60px nav + 12px breathing room */
   .main-content-scroll {
-    padding-bottom: 76px !important;
+    padding-bottom: 72px !important;
+    -webkit-overflow-scrolling: touch; /* iOS momentum scroll */
+    overscroll-behavior-y: contain;    /* prevent scroll from leaking to body */
   }
 
   /* Row 1: hamburger shown */
