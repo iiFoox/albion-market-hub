@@ -6,7 +6,7 @@ import {
   fetchAndBuildCatalog,
   loadCachedCatalog,
 } from './lib/catalogLoader';
-import { fetchGoldPrice, fetchMarketPrices } from './lib/marketApi';
+import { clearPriceCache, fetchGoldPrice, fetchMarketPrices } from './lib/marketApi';
 import { parseEnchantLevel, stripEnchant } from './lib/sidebarGroup';
 import { getRecipe } from './lib/recipes';
 import { GoldPanel } from './components/market/GoldPanel';
@@ -18,6 +18,8 @@ import { ItemScroller } from './components/market/ItemScroller';
 import { WelcomePanel } from './components/market/WelcomePanel';
 import { CraftingWorkspace } from './components/market/CraftingWorkspace';
 import { BlackMarketWorkspace } from './components/market/BlackMarketWorkspace';
+import { ApiStatusBadge } from './components/market/ApiStatusBadge';
+import { useApiReloader } from './lib/useApiReloader';
 import type { AlbionItemMini, MarketPriceRow, RegionKey, SidebarGroupId } from './types';
 import './market-layout.css';
 
@@ -197,12 +199,9 @@ export default function App() {
       setPrices([]);
       return;
     }
-    if (!isBackground) {
-      setLoadingPrices(true);
-    }
+    if (!isBackground) setLoadingPrices(true);
     setPriceError(null);
     try {
-      // Abort controller might be complex to manage with background updates, omitting for simplicity
       const data = await fetchMarketPrices(region, [resolvedItemId], undefined, { qualities: [quality] });
       setPrices(data);
     } catch (e: any) {
@@ -214,13 +213,27 @@ export default function App() {
     }
   }, [resolvedItemId, region, quality]);
 
+  /**
+   * Hard refresh: clears in-memory price cache → forces real API call → also refreshes gold.
+   * Called by the auto-reloader and by the manual ↺ button.
+   */
+  const hardRefresh = useCallback(async () => {
+    if (resolvedItemId) clearPriceCache(resolvedItemId);
+    await fetchPrices(true); // background = don't show full spinner, just update data silently
+    fetchGoldPrice(region).then(setGold).catch(() => {});
+  }, [resolvedItemId, fetchPrices, region]);
+
+  const reloader = useApiReloader({
+    intervalSec: 30,
+    onRefresh: hardRefresh,
+  });
+
+  // On item/region/quality change: clear cache and fetch fresh immediately
   useEffect(() => {
+    if (resolvedItemId) clearPriceCache(resolvedItemId);
     fetchPrices(false);
-    const intervalId = window.setInterval(() => {
-      fetchPrices(true);
-    }, 30_000);
-    return () => window.clearInterval(intervalId);
-  }, [fetchPrices]);
+  }, [fetchPrices, resolvedItemId]);
+
 
   const pickItem = useCallback((item: AlbionItemMini) => {
     setSelected(item);
@@ -318,6 +331,7 @@ export default function App() {
           onTabChange={setCurrentTab as any}
           onToggleSidebar={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
+          apiStatusBadge={<ApiStatusBadge reloader={reloader} />}
         />
 
         <div className="main-content-scroll" style={{ padding: '32px', flex: 1, overflowY: 'auto' }}>

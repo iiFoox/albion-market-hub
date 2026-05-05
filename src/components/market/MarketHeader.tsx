@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import type { AlbionItemMini, RegionKey } from '../../types';
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
   onTabChange: (tab: string) => void;
   onToggleSidebar: () => void;
   isSidebarOpen?: boolean;
+  apiStatusBadge?: ReactNode;
 };
 
 const REGION_ORDER: RegionKey[] = ['americas', 'europe', 'asia'];
@@ -45,6 +47,7 @@ export function MarketHeader({
   onTabChange,
   onToggleSidebar,
   isSidebarOpen,
+  apiStatusBadge,
 }: Props) {
   const showDropdown = search.trim().length >= 1;
 
@@ -159,6 +162,9 @@ export function MarketHeader({
               </button>
             ))}
           </div>
+
+          {/* API Status Badge */}
+          {apiStatusBadge}
 
           <div className="gold-ticker" title="Preço do ouro (prata por 1 ouro)">
             <span className="gold-ticker-icon" aria-hidden>🥇</span>

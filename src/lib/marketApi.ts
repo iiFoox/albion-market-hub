@@ -109,6 +109,17 @@ export async function fetchMarketPrices(
   return out;
 }
 
+/** Clears the in-memory price cache for a specific item, or ALL items if no ID given. */
+export function clearPriceCache(itemId?: string): void {
+  if (itemId === undefined) {
+    Object.keys(priceCache).forEach((k) => delete priceCache[k]);
+  } else {
+    Object.keys(priceCache)
+      .filter((k) => k.includes(`|${itemId}|`))
+      .forEach((k) => delete priceCache[k]);
+  }
+}
+
 export async function fetchGoldPrice(region: RegionKey, signal?: AbortSignal): Promise<number | null> {
   const url = `${API_HOST[region]}/api/v2/stats/gold.json?count=1`;
   const res = await fetch(url, { signal });
