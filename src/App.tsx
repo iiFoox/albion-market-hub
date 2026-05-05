@@ -14,11 +14,23 @@ import { ItemWorkspace } from './components/market/ItemWorkspace';
 import { MarketHeader } from './components/market/MarketHeader';
 import { MarketSidebar } from './components/market/MarketSidebar';
 import { BrowseItemList } from './components/market/BrowseItemList';
+import { ItemScroller } from './components/market/ItemScroller';
 import { WelcomePanel } from './components/market/WelcomePanel';
 import { CraftingWorkspace } from './components/market/CraftingWorkspace';
 import { BlackMarketWorkspace } from './components/market/BlackMarketWorkspace';
 import type { AlbionItemMini, MarketPriceRow, RegionKey, SidebarGroupId } from './types';
 import './market-layout.css';
+
+/** Valid sidebar group IDs — used to guard against stale localStorage values. */
+const VALID_SIDEBAR_GROUPS = new Set<string>([
+  'all', 'helmet', 'chest', 'boots', 'bag', 'weapon', 'offhand',
+  'food', 'potion', 'mount', 'raw', 'refined',
+]);
+
+function safeSidebarGroup(raw: unknown): SidebarGroupId {
+  if (typeof raw === 'string' && VALID_SIDEBAR_GROUPS.has(raw)) return raw as SidebarGroupId;
+  return 'all';
+}
 
 export default function App() {
   const [currentTab, setCurrentTab] = useLocalStorage<'market' | 'crafting' | 'blackmarket'>('amh-tab', 'market');
@@ -29,7 +41,8 @@ export default function App() {
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
 
-  const [sidebarGroup, setSidebarGroup] = useLocalStorage<SidebarGroupId>('amh-sidebar', 'all');
+  const [_rawSidebarGroup, setSidebarGroup] = useLocalStorage<SidebarGroupId>('amh-sidebar', 'all');
+  const sidebarGroup = safeSidebarGroup(_rawSidebarGroup);
   const [tierFilter, setTierFilter] = useLocalStorage<string>('amh-tier', 'all');
   const [quality, setQuality] = useLocalStorage<number>('amh-quality', 1);
   const [search, setSearch] = useState('');
@@ -99,30 +112,67 @@ export default function App() {
   /** Itens que passam por categoria, tier e texto da busca (se houver). */
   const filteredItems = useMemo(() => {
     if (!catalog) return [];
-    
+
+    const searchTokens = normalizeText(search.trim()).split(/\s+/).filter(Boolean);
+    const hasSearch = searchTokens.length > 0;
+
+    const result = catalog.filter((it) => {
+      if (sidebarGroup !== 'all' && it.sidebarGroup !== sidebarGroup) return false;
+      if (tierFilter !== 'all' && String(it.tier) !== tierFilter) return false;
+
+      // In 'all' with no search: hide tier-0 items (internal/junk items)
+      if (sidebarGroup === 'all' && !hasSearch && it.tier === 0) return false;
+
+      if (hasSearch) {
+        const itemText = normalizeText(`${it.name} ${it.id} ${it.category} tier ${it.tier} t${it.tier}`);
+        if (!searchTokens.every((token) => itemText.includes(token))) return false;
+      }
+
+      return true;
+    });
+
+    // In 'all' tab: sort so T4-T8 items with real names appear first
+    if (sidebarGroup === 'all') {
+      result.sort((a, b) => {
+        const aGood = a.tier >= 4 && a.tier <= 8 ? 1 : 0;
+        const bGood = b.tier >= 4 && b.tier <= 8 ? 1 : 0;
+        if (aGood !== bGood) return bGood - aGood;
+        return b.tier - a.tier;
+      });
+    }
+
+    return result;
+  }, [catalog, search, sidebarGroup, tierFilter]);
+
+  /** Itens filtrados para o Black Market: ignora sidebarGroup, usa apenas search e tier. */
+  const blackMarketFilteredItems = useMemo(() => {
+    if (!catalog) return [];
+
     const searchTokens = normalizeText(search.trim()).split(/\s+/).filter(Boolean);
 
     return catalog.filter((it) => {
-      if (sidebarGroup !== 'all' && it.sidebarGroup !== sidebarGroup) return false;
+      // No Black Market, não filtramos por sidebarGroup
       if (tierFilter !== 'all' && String(it.tier) !== tierFilter) return false;
-      
+
       if (searchTokens.length > 0) {
         const itemText = normalizeText(`${it.name} ${it.id} ${it.category} tier ${it.tier} t${it.tier}`);
         const matchesAllTokens = searchTokens.every((token) => itemText.includes(token));
         if (!matchesAllTokens) return false;
       }
-      
+
       return true;
     });
-  }, [catalog, search, sidebarGroup, tierFilter]);
+  }, [catalog, search, tierFilter]);
 
   /** Itens craftáveis: apenas os que têm receita gerada pela heurística */
   const craftableItems = useMemo(() => {
-    return filteredItems.filter((it) => {
+    // Usa blackMarketFilteredItems se estiver na aba blackmarket, senão usa filteredItems
+    const sourceItems = currentTab === 'blackmarket' ? blackMarketFilteredItems : filteredItems;
+    return sourceItems.filter((it) => {
       const base = stripEnchant(it.id);
       return getRecipe(base, 0) !== null;
     });
-  }, [filteredItems]);
+  }, [filteredItems, blackMarketFilteredItems, currentTab]);
 
   /** Dropdown do header: só quando há texto na busca. */
   const searchResults = useMemo(() => {
@@ -302,10 +352,14 @@ export default function App() {
                 onPickItem={pickItem}
                 sidebarGroup={sidebarGroup}
                 filteredCount={filteredItems.length}
-              />
+              >
+                {catalog && (
+                  <ItemScroller items={catalog} onPickItem={pickItem} iconsOnly speed={45} />
+                )}
+              </WelcomePanel>
               <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
                 <h3 style={{ margin: '0 0 24px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--gold)' }}>Lista de itens</h3>
-                <BrowseItemList key="market-list" items={filteredItems} onPickItem={pickItem} />
+                <BrowseItemList key={`market-list-${sidebarGroup}-${tierFilter}`} items={filteredItems} onPickItem={pickItem} />
               </div>
             </div>
           )}
@@ -318,6 +372,11 @@ export default function App() {
                 <p style={{ color: 'var(--text-muted)', margin: 0, textAlign: 'center', fontSize: '15px', lineHeight: 1.6, maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' }}>
                   Selecione um item craftável para abrir a <strong>Calculadora de Produção</strong> com análise de custo, retorno e lucro por cidade.
                 </p>
+                {craftableItems.length > 0 && (
+                  <div className="welcome-scroller">
+                    <ItemScroller items={craftableItems} onPickItem={pickItem} iconsOnly speed={40} />
+                  </div>
+                )}
               </div>
               <div className="browse-panel glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
@@ -339,11 +398,11 @@ export default function App() {
           )}
 
           {!selected && currentTab === 'blackmarket' && (
-            <BlackMarketWorkspace 
-              items={craftableItems} 
-              region={region} 
-              quality={quality} 
-              enchantLevel={enchantLevel} 
+            <BlackMarketWorkspace
+              items={filteredItems}
+              region={region}
+              quality={quality}
+              enchantLevel={enchantLevel}
             />
           )}
 

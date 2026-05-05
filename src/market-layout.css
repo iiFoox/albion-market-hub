@@ -1839,3 +1839,110 @@ img, video, svg {
   transform: scale(1.05);
 }
 
+
+/* === ITEM SCROLLER — Rotating carousel strip === */
+.item-scroller-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.item-scroller-track {
+  display: flex;
+  gap: 10px;
+  width: fit-content;
+  animation: scroll-left linear infinite;
+}
+
+.item-scroller-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.item-scroller-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: 'Inter', var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.item-scroller-chip:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: rgba(201, 168, 76, 0.3);
+  color: var(--gold);
+}
+
+.item-scroller-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.item-scroller-label {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === ITEM SCROLLER — Icons-only variant (inside welcome panels) === */
+.item-scroller-wrapper.icons-only {
+  margin: 16px auto 0;
+  max-width: 800px;
+}
+
+.item-scroller-wrapper.icons-only .item-scroller-chip {
+  padding: 4px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.item-scroller-wrapper.icons-only .item-scroller-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.item-scroller-wrapper.icons-only .item-scroller-chip:hover {
+  background: rgba(201, 168, 76, 0.12);
+  border-color: rgba(201, 168, 76, 0.25);
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+/* === WELCOME SCROLLER — inside welcome panels === */
+.welcome-scroller {
+  margin-top: 16px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.welcome-scroller .item-scroller-wrapper.icons-only {
+  max-width: 100%;
+  margin: 0;
+}
+
+.welcome-scroller .item-scroller-wrapper.icons-only .item-scroller-track {
+  gap: 8px;
+}

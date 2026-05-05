@@ -20,9 +20,10 @@ type Props = {
   onPickItem: (item: AlbionItemMini) => void;
   sidebarGroup: SidebarGroupId;
   filteredCount: number;
+  children?: React.ReactNode;
 };
 
-export function WelcomePanel({ sidebarGroup, filteredCount }: Props) {
+export function WelcomePanel({ sidebarGroup, filteredCount, children }: Props) {
   return (
     <div className="welcome-state fade-in welcome-state--compact">
       <span className="welcome-icon" aria-hidden>
@@ -33,6 +34,7 @@ export function WelcomePanel({ sidebarGroup, filteredCount }: Props) {
         {SIDEBAR_HINT[sidebarGroup]} Use a busca para refinar.{' '}
         <strong className="welcome-count">{filteredCount.toLocaleString('pt-BR')} itens</strong> visíveis com os filtros atuais.
       </div>
+      {children && <div className="welcome-scroller">{children}</div>}
     </div>
   );
 }

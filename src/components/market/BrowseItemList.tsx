@@ -6,8 +6,8 @@ type Props = {
   onPickItem: (item: AlbionItemMini) => void;
 };
 
-// Desktop: cap at 400 for performance. Mobile: start at 10, expand to all.
-const DESKTOP_MAX = 400;
+// Desktop: cap at 100 for performance. Mobile: start at 10, expand to all.
+const DESKTOP_MAX = 100;
 const MOBILE_INITIAL = 10;
 
 function useIsMobile() {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchMarketPrices } from '../../lib/marketApi';
 import { formatPrice } from '../../lib/formatPrice';
 import { CRAFTING_CITIES, CITY_COLORS } from '../../lib/useCraftingCalc';
@@ -22,7 +22,7 @@ interface FlipOpportunity {
 }
 
 function useIsMobile() {
-  const [mobile, setMobile] = useState(() => window.innerWidth < 900);
+  const [mobile, setMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 900);
   useEffect(() => {
     const handler = () => setMobile(window.innerWidth < 900);
     window.addEventListener('resize', handler, { passive: true });
@@ -37,18 +37,23 @@ export function BlackMarketWorkspace({ items, region, quality, enchantLevel }: P
   const [hasScanned, setHasScanned] = useState(false);
   const isMobile = useIsMobile();
 
-  const scanItems = items.slice(0, 100);
+  // Reset results when inputs change
+  useEffect(() => {
+    setResults([]);
+    setHasScanned(false);
+  }, [items, quality, enchantLevel]);
 
   const handleScan = async () => {
+    const scanItems = items.slice(0, 100);
     if (scanItems.length === 0) return;
     setScanning(true);
     setHasScanned(false);
 
     const ids = scanItems.map(i => enchantLevel > 0 ? `${i.id}@${enchantLevel}` : i.id);
-    
+
     try {
       const data = await fetchMarketPrices(region, ids, undefined, { qualities: [quality] });
-      
+
       const opportunities: FlipOpportunity[] = [];
 
       for (let i = 0; i < scanItems.length; i++) {
@@ -75,7 +80,7 @@ export function BlackMarketWorkspace({ items, region, quality, enchantLevel }: P
         if (bestPrice < Infinity && bestPrice < bmPrice) {
           const sellRevenue = bmPrice * 0.935;
           const profit = sellRevenue - bestPrice;
-          
+
           if (profit > 0) {
             opportunities.push({
               item,
@@ -108,16 +113,16 @@ export function BlackMarketWorkspace({ items, region, quality, enchantLevel }: P
             <span aria-hidden>🦇</span> Radar do Mercado Negro
           </h2>
           <p className="welcome-sub" style={{ color: 'var(--text-muted)', margin: 0, fontSize: '14px' }}>
-            Buscando oportunidades de flip de {scanItems.length} itens da categoria atual.
+            Buscando oportunidades de flip de {results.length} itens.
           </p>
         </div>
-        <button 
+        <button
           onClick={handleScan}
-          disabled={scanning || scanItems.length === 0}
-          style={{ 
-            background: 'var(--gold)', color: '#000', border: 'none', padding: '12px 32px', 
+          disabled={scanning || items.length === 0}
+          style={{
+            background: 'var(--gold)', color: '#000', border: 'none', padding: '12px 32px',
             borderRadius: '8px', fontWeight: 800, fontSize: '15px', cursor: scanning ? 'wait' : 'pointer',
-            opacity: (scanning || scanItems.length === 0) ? 0.5 : 1, transition: 'all 0.2s',
+            opacity: (scanning || items.length === 0) ? 0.5 : 1, transition: 'all 0.2s',
             width: '100%', maxWidth: '280px'
           }}
         >
@@ -137,129 +142,129 @@ export function BlackMarketWorkspace({ items, region, quality, enchantLevel }: P
       {/* Results */}
       {results.length > 0 && (
         <div className="glass-panel fade-in-up" style={{ padding: isMobile ? '12px' : '20px', borderRadius: '16px' }}>
-          
-          {/* Header bar */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-            <span style={{ fontSize: '13px', color: 'var(--gold)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              🎯 {results.length} oportunidades
-            </span>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Lucro estimado após 6.5% de taxa</span>
-          </div>
 
-          {/* MOBILE: Card layout */}
-          {isMobile ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {results.map((res) => (
-                <div
-                  key={res.fullId}
-                  style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '12px',
-                    padding: '12px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                  }}
-                >
-                  {/* Row 1: icon + name + ROI badge */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img
-                      src={`https://render.albiononline.com/v1/item/${res.fullId}.png?size=48`}
-                      style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(0,0,0,0.3)', flexShrink: 0 }}
-                      alt=""
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {res.item.name}
-                      </div>
-                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {res.fullId}
-                      </div>
-                    </div>
-                    <span style={{ background: '#4caf7d22', color: '#4caf7d', border: '1px solid #4caf7d44', borderRadius: '6px', padding: '3px 8px', fontSize: '12px', fontWeight: 800, flexShrink: 0 }}>
-                      {res.margin.toFixed(1)}%
-                    </span>
-                  </div>
-
-                  {/* Row 2: stats grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
-                    <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Comprar em</div>
-                      <div style={{
-                        fontSize: '11px', fontWeight: 700,
-                        color: CITY_COLORS[res.buyCity] ?? 'var(--text-primary)',
-                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-                      }}>
-                        {res.buyCity}
-                      </div>
-                    </div>
-                    <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Compra</div>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#e05555', fontFamily: 'monospace' }}>
-                        {formatPrice(res.buyPrice)}
-                      </div>
-                    </div>
-                    <div style={{ background: 'rgba(76,175,125,0.1)', border: '1px solid rgba(76,175,125,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Lucro</div>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: '#4caf7d', fontFamily: 'monospace' }}>
-                        {formatPrice(res.profit)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Header bar */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+              <span style={{ fontSize: '13px', color: 'var(--gold)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                🎯 {results.length} oportunidades
+              </span>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Lucro estimado após 6.5% de taxa</span>
             </div>
-          ) : (
-            /* DESKTOP: Full table */
-            <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '14px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Item</th>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Comprar em</th>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Preço Compra</th>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Vender (Black Market)</th>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Lucro (6.5% Tx)</th>
-                  <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>ROI</th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((res, idx) => (
-                  <tr key={res.fullId} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: idx % 2 === 0 ? 'rgba(255,255,255,0.01)' : 'transparent' }}>
-                    <td style={{ padding: '14px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <img src={`https://render.albiononline.com/v1/item/${res.fullId}.png?size=48`}
-                        style={{ width: '40px', height: '40px', borderRadius: '6px', background: 'rgba(0,0,0,0.2)' }} alt=""
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '15px' }}>{res.item.name}</span>
-                        <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{res.fullId}</span>
+
+            {/* MOBILE: Card layout */}
+            {isMobile ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {results.map((res) => (
+                  <div
+                    key={res.fullId}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '12px',
+                      padding: '12px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '10px',
+                    }}
+                >
+                    {/* Row 1: icon + name + ROI badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <img
+                          src={`https://render.albiononline.com/v1/item/${res.fullId}.png?size=48`}
+                          style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(0,0,0,0.3)', flexShrink: 0 }}
+                          alt=""
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {res.item.name}
+                        </div>
+                        <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {res.fullId}
+                        </div>
                       </div>
-                    </td>
-                    <td style={{ padding: '14px 0' }}>
-                      <span style={{ background: CITY_COLORS[res.buyCity] + '33', color: CITY_COLORS[res.buyCity] ?? 'var(--text-muted)', padding: '4px 10px', borderRadius: '5px', fontSize: '13px', fontWeight: 600, border: `1px solid ${CITY_COLORS[res.buyCity] ?? 'var(--border)'}44` }}>
-                        {res.buyCity}
+                      <span style={{ background: '#4caf7d22', color: '#4caf7d', border: '1px solid #4caf7d44', borderRadius: '6px', padding: '3px 8px', fontSize: '12px', fontWeight: 800, flexShrink: 0 }}>
+                        {res.margin.toFixed(1)}%
                       </span>
-                    </td>
-                    <td style={{ padding: '14px 0', textAlign: 'right', fontFamily: 'Share Tech Mono, monospace', fontSize: '14px', color: '#c94c4c' }}>
-                      {formatPrice(res.buyPrice)}
-                    </td>
-                    <td style={{ padding: '14px 0', textAlign: 'right', fontFamily: 'Share Tech Mono, monospace', fontSize: '14px', color: 'var(--gold)' }}>
-                      {formatPrice(res.bmPrice)}
-                    </td>
-                    <td style={{ padding: '14px 0', textAlign: 'right', fontFamily: 'Share Tech Mono, monospace', fontWeight: 800, fontSize: '15px', color: '#4caf7d' }}>
-                      {formatPrice(res.profit)}
-                    </td>
-                    <td style={{ padding: '14px 0', textAlign: 'right', fontWeight: 700, fontSize: '14px', color: '#4caf7d' }}>
-                      {res.margin.toFixed(1)}%
-                    </td>
-                  </tr>
+                    </div>
+
+                    {/* Row 2: stats grid */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+                      <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Comprar em</div>
+                        <div style={{
+                          fontSize: '11px', fontWeight: 700,
+                          color: CITY_COLORS[res.buyCity] ?? 'var(--text-primary)',
+                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                        }}>
+                          {res.buyCity}
+                        </div>
+                      </div>
+                      <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Compra</div>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: '#e05555', fontFamily: 'monospace' }}>
+                          {formatPrice(res.buyPrice)}
+                        </div>
+                      </div>
+                      <div style={{ background: 'rgba(76,175,125,0.1)', border: '1px solid rgba(76,175,125,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Lucro</div>
+                        <div style={{ fontSize: '13px', fontWeight: 800, color: '#4caf7d', fontFamily: 'monospace' }}>
+                          {formatPrice(res.profit)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      )}
+              </div>
+            ) : (
+              /* DESKTOP: Full table */
+              <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '14px' }}>
+                <thead>
+                    <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                      <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Item</th>
+                      <th style={{ padding: '12px 0', color: 'var(--text-muted)' }}>Comprar em</th>
+                      <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Preço Compra</th>
+                      <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Vender (Black Market)</th>
+                      <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>Lucro (6.5% Tx)</th>
+                      <th style={{ padding: '12px 0', color: 'var(--text-muted)', textAlign: 'right' }}>ROI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {results.map((res, idx) => (
+                    <tr key={res.fullId} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: idx % 2 === 0 ? 'rgba(255,255,255,0.01)' : 'transparent' }}>
+                      <td style={{ padding: '14px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <img src={`https://render.albiononline.com/v1/item/${res.fullId}.png?size=48`}
+                          style={{ width: '40px', height: '40px', borderRadius: '6px', background: 'rgba(0,0,0,0.2)' }} alt=""
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '15px' }}>{res.item.name}</span>
+                          <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{res.fullId}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px 0' }}>
+                        <span style={{ background: CITY_COLORS[res.buyCity] + '33', color: CITY_COLORS[res.buyCity] ?? 'var(--text-muted)', padding: '4px 10px', borderRadius: '5px', fontSize: '13px', fontWeight: 600, border: `1px solid ${CITY_COLORS[res.buyCity] ?? 'var(--border)'}44` }}>
+                          {res.buyCity}
+                        </span>
+                      </td>
+                      <td style={{ padding: '14px 0', textAlign: 'right', fontFamily: 'Share Tech Mono, monospace', fontSize: '14px', color: '#c94c4c' }}>
+                        {formatPrice(res.buyPrice)}
+                      </td>
+                      <td style={{ padding: '14px 0', textAlign: 'right', fontFamily: 'Share Tech Mono, monospace', fontSize: '14px', color: 'var(--gold)' }}>
+                        {formatPrice(res.bmPrice)}
+                      </td>
+                      <td style={{ padding: '14px 0', textAlign: 'right', fontFamily: 'Share Tech Mono, monospace', fontWeight: 800, fontSize: '15px', color: '#4caf7d' }}>
+                        {formatPrice(res.profit)}
+                      </td>
+                      <td style={{ padding: '14px 0', textAlign: 'right', fontWeight: 700, fontSize: '14px', color: '#4caf7d' }}>
+                        {res.margin.toFixed(1)}%
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        )}
     </div>
   );
 }

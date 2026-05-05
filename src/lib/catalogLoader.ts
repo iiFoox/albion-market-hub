@@ -4,7 +4,7 @@ import { ITEMS_JSON_URL } from '../config';
 import { categorizeItem } from './itemCategory';
 import { inferSidebarGroup, inferTier } from './sidebarGroup';
 
-const CACHE_KEY = 'albion-vip-catalog-v3';
+const CACHE_KEY = 'albion-vip-catalog-v5';
 
 type RawItem = {
   UniqueName?: string;
