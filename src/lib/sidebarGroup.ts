@@ -32,10 +32,16 @@ export function inferSidebarGroup(id: string, category: string): ItemSidebarGrou
   }
 
   if (category.startsWith('Armas')) return 'weapon';
-  if (category.startsWith('Armaduras')) return 'armor';
   if (category.startsWith('Off-hand')) return 'offhand';
   if (category === 'Montarias' || /MOUNT|STAG|OX|HORSE|SWIFT/.test(u)) return 'mount';
   if (category === 'Bolsas' || category === 'Capas') return 'bag';
+
+  // Split armor into three categories
+  if (category === 'Armaduras — Capuz / Elmo') return 'helmet';
+  if (category === 'Armaduras — Peito') return 'chest';
+  if (category === 'Armaduras — Botas') return 'boots';
+  // Fallback for any remaining armor category
+  if (category.startsWith('Armaduras')) return 'chest';
 
   return 'other';
 }
@@ -46,7 +52,9 @@ export function emojiForSidebarGroup(g: SidebarGroupId | ItemSidebarGroup): stri
     raw: '🪨',
     refined: '⚙️',
     weapon: '⚔️',
-    armor: '🛡️',
+    helmet: '⛑️',
+    chest: '🛡️',
+    boots: '👢',
     offhand: '🗡️',
     food: '🍖',
     potion: '🧪',

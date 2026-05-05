@@ -11,16 +11,18 @@ type Props = {
 };
 
 const NAV: { id: SidebarGroupId; icon: string; label: string }[] = [
-  { id: 'all', icon: '✨', label: 'Todos os Itens' },
-  { id: 'raw', icon: '🪨', label: 'Recursos Brutos' },
-  { id: 'refined', icon: '⚙️', label: 'Recursos Refinados' },
-  { id: 'weapon', icon: '⚔️', label: 'Armas' },
-  { id: 'armor', icon: '🛡️', label: 'Armaduras' },
-  { id: 'offhand', icon: '🗡️', label: 'Off-Hand' },
-  { id: 'food', icon: '🍖', label: 'Comida' },
-  { id: 'potion', icon: '🧪', label: 'Poções' },
-  { id: 'mount', icon: '🐎', label: 'Montarias' },
-  { id: 'bag', icon: '🎒', label: 'Mochilas & Capas' },
+  { id: 'all',     icon: '✨',  label: 'Todos os Itens' },
+  { id: 'helmet',  icon: '⛑️',  label: 'Capacetes' },
+  { id: 'chest',   icon: '🛡️',  label: 'Peitorais' },
+  { id: 'boots',   icon: '👢',  label: 'Botas' },
+  { id: 'bag',     icon: '🎒',  label: 'Mochilas & Capas' },
+  { id: 'weapon',  icon: '⚔️',  label: 'Armas' },
+  { id: 'offhand', icon: '🗡️',  label: 'Off-Hand' },
+  { id: 'food',    icon: '🍖',  label: 'Comida' },
+  { id: 'potion',  icon: '🧪',  label: 'Poções' },
+  { id: 'mount',   icon: '🐎',  label: 'Montarias' },
+  { id: 'raw',     icon: '🪨',  label: 'Recursos Brutos' },
+  { id: 'refined', icon: '⚙️',  label: 'Recursos Refinados' },
 ];
 
 const TIERS = ['all', '4', '5', '6', '7', '8'] as const;

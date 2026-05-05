@@ -3,15 +3,17 @@ export type RegionKey = 'europe' | 'americas' | 'asia';
 /** Filtros da barra lateral (HTML de referência) */
 export type SidebarGroupId =
   | 'all'
-  | 'raw'
-  | 'refined'
+  | 'helmet'
+  | 'chest'
+  | 'boots'
+  | 'bag'
   | 'weapon'
-  | 'armor'
   | 'offhand'
   | 'food'
   | 'potion'
   | 'mount'
-  | 'bag';
+  | 'raw'
+  | 'refined';
 
 export type ItemSidebarGroup = Exclude<SidebarGroupId, 'all'> | 'other';
 

@@ -1,16 +1,18 @@
 import type { AlbionItemMini, SidebarGroupId } from '../../types';
 
 const SIDEBAR_HINT: Record<SidebarGroupId, string> = {
-  all: 'Todos os itens do catálogo.',
-  raw: 'Recursos brutos (minério, madeira, fibra…).',
-  refined: 'Barras, pranchas, tecido, couro, pedra.',
-  weapon: 'Armas de todas as linhas.',
-  armor: 'Peças de armadura (capuz, peito, botas).',
+  all:     'Todos os itens do catálogo.',
+  helmet:  'Capacetes, capuzes e elmos de todas as linhas.',
+  chest:   'Peitorais e armaduras de corpo de todas as linhas.',
+  boots:   'Botas e sapatos de todas as linhas.',
+  bag:     'Mochilas e capas.',
+  weapon:  'Armas de todas as linhas.',
   offhand: 'Escudos, livros, orbes…',
-  food: 'Comidas e ingredientes.',
-  potion: 'Poções e venenos.',
-  mount: 'Montarias.',
-  bag: 'Mochilas e capas.',
+  food:    'Comidas e ingredientes.',
+  potion:  'Poções e venenos.',
+  mount:   'Montarias.',
+  raw:     'Recursos brutos (minério, madeira, fibra…).',
+  refined: 'Barras, pranchas, tecido, couro, pedra.',
 };
 
 type Props = {

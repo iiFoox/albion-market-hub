@@ -147,42 +147,54 @@ img, video, svg {
 }
 
 .app-header {
-  padding: 24px 32px;
-  background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  background: rgba(10, 12, 20, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   width: 100%;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .main-tabs {
-  margin: 0;
   display: flex;
-  gap: 8px;
-  background: transparent;
+  gap: 2px;
+  margin: 0;
   padding: 0;
+  flex-shrink: 0;
+  align-items: center;
 }
 
 .main-tab {
-  padding: 8px 24px;
-  border-radius: 30px;
+  padding: 6px 20px;
+  border-radius: 999px;
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-muted);
+  font-family: 'Outfit', var(--font-heading);
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 13px;
-  letter-spacing: 1px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+}
+
+.main-tab:hover {
+  color: var(--text-primary);
 }
 
 .main-tab.active {
-  background: var(--bg-secondary);
   color: var(--gold);
+  background: transparent;
   border-color: var(--gold-dim);
 }
 
@@ -194,53 +206,91 @@ img, video, svg {
 
 .search-wrapper {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   position: relative;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .server-tabs {
-  background: var(--bg-secondary);
-  padding: 4px;
-  border-radius: 8px;
   display: flex;
   gap: 2px;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
 }
 
 .server-tab {
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 5px 12px;
+  font-size: 11px;
   border-radius: 6px;
   background: transparent;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
+  font-family: 'Inter', var(--font-body);
   font-weight: 600;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.server-tab:hover {
+  color: var(--text-primary);
 }
 
 .server-tab.active {
   background: var(--gold);
-  color: #000;
+  color: #0a0800;
+  font-weight: 700;
 }
 
 .gold-ticker {
-  margin-left: 8px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(0,0,0,0.2);
-  padding: 6px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  gap: 8px;
+  padding: 7px 14px;
+  background: rgba(201, 168, 76, 0.06);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
-/* Utility: hide on mobile, show on desktop */
+.gold-ticker-icon {
+  font-size: 16px;
+}
+
+.gold-ticker-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.gold-ticker-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Outfit', var(--font-heading);
+  font-weight: 600;
+}
+
+.gold-ticker-price {
+  font-family: 'Share Tech Mono', var(--font-mono);
+  font-size: 14px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
 .desktop-only {
   display: flex;
 }
@@ -391,40 +441,7 @@ img, video, svg {
   text-transform: uppercase;
 }
 
-.server-tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 3px;
-  flex-shrink: 0;
-}
 
-.server-tab {
-  padding: 5px 12px;
-  border-radius: 5px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-family: 'Exo 2', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.server-tab.active {
-  background: var(--gold);
-  color: #0a0800;
-}
-
-.server-tab:hover:not(.active) {
-  color: var(--text-primary);
-  background: var(--bg-card-hover);
-}
 
 .search-wrapper {
   flex: 1;
@@ -622,43 +639,6 @@ img, video, svg {
   width: 100%;
 }
 
-.main-tabs {
-  display: flex;
-  gap: 8px;
-  margin: 16px auto -4px;
-  max-width: 1400px;
-  padding: 0 24px;
-  position: relative;
-  z-index: 2;
-}
-
-.main-tab {
-  padding: 10px 32px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
-  color: var(--text-muted);
-  font-family: 'Cinzel', serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.main-tab.active {
-  background: var(--bg-card);
-  color: var(--gold);
-  border-color: var(--gold-dim);
-  box-shadow: 0 -4px 12px rgba(201, 168, 76, 0.05);
-}
-
-.main-tab:hover:not(.active) {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-}
 
 .sidebar {
   display: flex;
@@ -1850,13 +1830,6 @@ img, video, svg {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.main-tab {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.main-tab:hover {
-  transform: translateY(-2px);
-}
 
 .filter-chip {
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -1866,10 +1839,3 @@ img, video, svg {
   transform: scale(1.05);
 }
 
-.server-tab {
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.server-tab:hover {
-  transform: scale(1.05);
-}
